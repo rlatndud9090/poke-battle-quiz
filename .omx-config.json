@@ -1,9 +1,0 @@
-{
-  "wiki": {
-    "autoCapture": true,
-    "root": "docs/wiki",
-    "rawDir": "docs/raw",
-    "index": "docs/wiki/index.md",
-    "log": "docs/wiki/log.md"
-  }
-}

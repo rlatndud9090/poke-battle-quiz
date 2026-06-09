@@ -17,6 +17,8 @@ UI renders battle logs plus revealed hints.
 This project uses the Karpathy-style LLM Wiki pattern.
 
 - Raw sources are append-only project memory under `docs/raw/`.
+- Raw sources are grouped by branch-like work units:
+  `docs/raw/feature/`, `docs/raw/bugfix/`, and `docs/raw/chore/`.
 - The LLM-maintained wiki lives under `docs/wiki/`.
 - `docs/wiki/index.md` is the first wiki file to read in every new session.
 - `docs/wiki/log.md` is the chronological maintenance ledger.
@@ -29,12 +31,12 @@ On session start:
 2. Read `docs/wiki/log.md`.
 3. Read any linked wiki pages relevant to the task before making architectural
    or product decisions.
-4. Fall back to `docs/session-handoff.md` and `docs/data-sources.md` when the
-   wiki points there or when the wiki is stale.
+4. Read relevant raw notes under `docs/raw/<unit-type>/` only when the compiled
+   wiki needs source-level context.
 
 When to update the wiki:
 
-- After a product decision, architecture decision, data-source decision, or
+- After a product decision, architecture decision, data import decision, or
   implementation milestone.
 - After a meaningful debugging discovery or test/verification result.
 - After a discussion that changes project direction.
@@ -44,6 +46,8 @@ Wiki maintenance rules:
 
 - Preserve raw sources. Do not rewrite existing raw files; add a new raw note
   when context changes or a correction is needed.
+- Create raw notes per feature, bugfix, or chore unit. Do not create one large
+  session dump when a smaller unit note will preserve the decision cleanly.
 - Keep wiki pages concise, linked, and evidence-aware.
 - Separate evidence from inference. Cite local files, raw notes, or web sources
   where possible.
@@ -60,6 +64,7 @@ Wiki maintenance rules:
 - `docs/wiki/architecture/project-overview.md`
 - `docs/wiki/architecture/quiz-hint-engine.md`
 - `docs/wiki/decision/llm-wiki-harness.md`
+- `docs/wiki/convention/raw-data-units.md`
 - `docs/wiki/reference/llm-wiki-pattern.md`
 - `docs/wiki/session-log/2026-06-09-context-bootstrap.md`
 

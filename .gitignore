@@ -12,7 +12,6 @@ dist
 dist-ssr
 *.local
 .omx/
-.reference-repos/
 
 # Editor directories and files
 .vscode/*

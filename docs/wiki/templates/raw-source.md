@@ -1,8 +1,8 @@
 # Raw Source: Title
 
 Date: YYYY-MM-DD Asia/Seoul
-Source type: conversation | local-doc | web-research | code-inspection | verification
-Status: raw, append-only
+Unit type: feature | bugfix | chore
+Status: raw, append-only, public-safe
 
 ## Context
 

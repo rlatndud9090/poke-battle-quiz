@@ -2,9 +2,8 @@
 
 포켓몬 배틀 형식을 빌린 1일 1문제 포켓몬 추리 퀴즈 사이트입니다.
 
-핵심 아이디어는 Wordle, Semantle, Pokemantle처럼 매일 모두가 같은
-정답을 맞히되, 질문을 단순 텍스트가 아니라 배틀 커맨드로 수행하는
-것입니다.
+핵심 아이디어는 하루에 하나의 공통 정답을 맞히되, 질문을 단순
+텍스트가 아니라 배틀 커맨드로 수행하는 것입니다.
 
 ## Current Setup
 
@@ -38,17 +37,7 @@ http://127.0.0.1:5173/
 
 - [Agent guide](AGENTS.md): 프로젝트별 에이전트 운영 규칙과 LLM Wiki 진입점
 - [LLM Wiki index](docs/wiki/index.md): LLM이 유지하는 프로젝트 지식 레이어
-- [Session handoff](docs/session-handoff.md): 다음 세션이 이어받기 위한 전체 맥락
-- [Data source strategy](docs/data-sources.md): 데이터 소스, 참조 저장소, import 전략
-
-## Local Reference Repos
-
-외부 참조 저장소는 `.reference-repos/` 아래 sparse clone으로 받아두었습니다.
-이 폴더는 Git에서 제외됩니다.
-
-- `.reference-repos/pokemantle`
-- `.reference-repos/pokerogue`
-- `.reference-repos/pokemon-showdown`
+- [Raw note policy](docs/wiki/convention/raw-data-units.md): feature/bugfix/chore 단위 raw 기록 규칙
 
 ## Important Direction
 
@@ -59,7 +48,7 @@ http://127.0.0.1:5173/
 ## Disclaimer
 
 This is an unofficial fan project. It is not affiliated with Nintendo, Game Freak,
-Creatures, The Pokemon Company, or Pokemon Showdown.
+Creatures, or The Pokemon Company.
 
 우선 구현할 커맨드:
 

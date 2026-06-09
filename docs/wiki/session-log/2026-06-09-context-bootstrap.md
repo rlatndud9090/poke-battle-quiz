@@ -3,19 +3,16 @@
 Status: active
 Category: session-log
 Last updated: 2026-06-09
-Sources: `docs/raw/2026-06-09-session-bootstrap.md`
+Sources: `docs/raw/chore/2026-06-09-repository-bootstrap.md`
 
 ## What Happened
-
-The session started from an existing handoff in `docs/session-handoff.md`.
 
 The project context was loaded:
 
 - Daily Pokemon deduction quiz.
 - Battle-style commands as the hint surface.
 - Vite React TypeScript starter app.
-- Vitest, ESLint, and reference repositories already present.
-- No git repository initialized yet.
+- Vitest and ESLint already configured.
 
 The user then asked whether the quiz progression needed a battle engine. The
 answer was refined: the project needs a quiz hint engine, not a full damage or
@@ -32,7 +29,7 @@ conversation context, and architecture history persist across sessions.
 
 - Adopted `docs/wiki/` as the project-local LLM Wiki.
 - Added project-local `AGENTS.md` as the schema and index surface.
-- Captured the first raw source note.
+- Captured the first public-safe raw source note.
 - Compiled initial architecture and decision pages.
 
 ## Follow-Up

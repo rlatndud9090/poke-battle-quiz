@@ -3,7 +3,7 @@
 Status: active
 Category: architecture
 Last updated: 2026-06-09
-Sources: `docs/raw/2026-06-09-session-bootstrap.md`, `docs/session-handoff.md`, `docs/data-sources.md`
+Sources: `docs/raw/chore/2026-06-09-repository-bootstrap.md`
 
 ## Core Decision
 

@@ -3,7 +3,7 @@
 Status: active
 Category: architecture
 Last updated: 2026-06-09
-Sources: `docs/raw/2026-06-09-session-bootstrap.md`, `docs/session-handoff.md`, `README.md`
+Sources: `docs/raw/chore/2026-06-09-repository-bootstrap.md`, `README.md`
 
 ## Summary
 
@@ -54,13 +54,8 @@ npm run test:run
 ## Data Direction
 
 Use curated data first, then generated data snapshots later.
-
-Primary data reference: Pokemon Showdown.
-
-Secondary data reference: PokeAPI.
-
-Behavioral reference: PokeRogue, without copying implementation code because of
-its AGPL license.
+Keep data import decisions out of public docs until the importer strategy is
+implemented and reviewed.
 
 ## Durable Architecture Boundary
 

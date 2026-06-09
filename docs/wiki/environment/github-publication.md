@@ -4,8 +4,7 @@ Status: active
 Category: environment
 Last updated: 2026-06-09
 Sources:
-- `docs/raw/2026-06-09-github-publication.md`
-- `docs/raw/2026-06-09-github-publication-complete.md`
+- `docs/raw/chore/2026-06-09-github-publication.md`
 
 ## Summary
 

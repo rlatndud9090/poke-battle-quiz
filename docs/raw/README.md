@@ -1,19 +1,48 @@
-# Raw Notes
+# Raw Sources
 
-Raw notes are grouped like branch work units.
+Raw sources are the durable source of truth for this project. The wiki is only a
+thin navigation layer over these files.
 
-Use one raw note per meaningful unit of work:
-
-- `feature/` for product or capability work.
-- `bugfix/` for defect investigation and fixes.
-- `chore/` for setup, repository hygiene, docs, tooling, and maintenance.
-
-File naming convention:
+## Directory Shape
 
 ```txt
-docs/raw/<unit-type>/<yyyy-mm-dd>-<short-topic>.md
+docs/raw/
+  _templates/
+  feature/
+    YYYY-MM-DD-short-slug/
+      prd.md
+      adr.md
+      notes.md
+  bugfix/
+    YYYY-MM-DD-short-slug/
+      bugfix.md
+      notes.md
+  chore/
+    YYYY-MM-DD-short-slug/
+      notes.md
+      adr.md
 ```
 
-Raw notes should capture durable facts and decisions for that unit. Keep them
-public-safe: do not include credentials, local-only clone details, private paths,
-or unnecessary third-party source-code provenance.
+## Unit Types
+
+- `feature/`: product capability or user-facing workflow.
+- `bugfix/`: defect investigation and correction.
+- `chore/`: setup, repository hygiene, documentation, tooling, and maintenance.
+
+## Feature Development Flow
+
+1. Create `docs/raw/feature/YYYY-MM-DD-short-slug/`.
+2. Copy `docs/raw/_templates/feature-prd.md` to `prd.md`.
+3. Copy `docs/raw/_templates/feature-adr.md` to `adr.md`.
+4. Add `notes.md` from `docs/raw/_templates/notes.md` when implementation or
+   verification details need to survive the session.
+5. Update `docs/wiki/index.md` with one link line under the best category.
+6. In commits, reference the raw unit path in the message body or trailer.
+
+## Rules
+
+- Keep raw sources public-safe: no credentials, private account details,
+  local-only clone commands, or unnecessary third-party source-code provenance.
+- Once a PRD or ADR is accepted, prefer a superseding ADR or an added note over
+  rewriting the accepted artifact.
+- Keep `docs/wiki/index.md` thin. Put details here in raw units, not in the wiki.

@@ -36,8 +36,8 @@ http://127.0.0.1:5173/
 ## Documentation
 
 - [Agent guide](AGENTS.md): 프로젝트별 에이전트 운영 규칙과 LLM Wiki 진입점
-- [LLM Wiki index](docs/wiki/index.md): LLM이 유지하는 프로젝트 지식 레이어
-- [Raw note policy](docs/wiki/convention/raw-data-units.md): feature/bugfix/chore 단위 raw 기록 규칙
+- [LLM Wiki index](docs/wiki/index.md): 얇은 프로젝트 방향성 및 raw unit 네비게이션
+- [Raw source guide](docs/raw/README.md): feature/bugfix/chore 단위 raw 기록 규칙
 
 ## Important Direction
 

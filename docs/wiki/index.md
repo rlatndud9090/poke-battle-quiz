@@ -1,56 +1,44 @@
-# Poke Battle Quiz LLM Wiki
+# Poke Battle Quiz Wiki Index
 
-Last updated: 2026-06-09 Asia/Seoul
+> This is the only always-loaded LLM Wiki page. It gives the project direction
+> and points to raw work-unit artifacts. Do not turn it into a synthesis dump.
 
-This is the maintained LLM-written knowledge layer for the project. Raw sources
-remain under `docs/raw/`; this wiki compiles them into durable project context.
+Last updated: 2026-06-10 Asia/Seoul
 
-## Read First
+## Direction
 
-- [[architecture/project-overview]] - product intent, current stack, and MVP boundary
-- [[architecture/quiz-hint-engine]] - event-driven hint engine and ability trigger design
-- [[decision/llm-wiki-harness]] - why and how this wiki is maintained
-- [[convention/raw-data-units]] - feature/bugfix/chore raw note policy
-- [[reference/llm-wiki-pattern]] - researched summary of Karpathy's LLM Wiki pattern
-- [[environment/github-publication]] - public GitHub repository publication state
-- [[session-log/2026-06-09-context-bootstrap]] - first captured session context
+- **What:** a daily Pokemon-themed deduction quiz where everyone solves the same
+  Pokemon answer.
+- **How:** players reveal information through battle-like commands instead of
+  free-form questions.
+- **Engine boundary:** the MVP uses a deterministic quiz hint engine, not a full
+  battle simulator.
+- **State boundary:** MVP progress and personal stats can start in localStorage.
+- **Knowledge boundary:** raw PRD/ADR/notes files are the source of truth; this
+  index is only navigation.
 
-## Raw Source Inventory
+## Raw Units
 
-- `docs/raw/README.md` - raw note structure and public-safety rules
-- `docs/raw/chore/2026-06-09-repository-bootstrap.md` - initial public-safe project setup context
-- `docs/raw/chore/2026-06-09-github-publication.md` - public GitHub repository publication facts
-- `docs/raw/chore/2026-06-09-public-docs-cleanup.md` - public documentation cleanup decisions
+### Product & Architecture
 
-## Existing Non-Wiki Docs
+- **Product foundation** — [PRD](../raw/feature/2026-06-09-product-foundation/prd.md) · [ADR](../raw/feature/2026-06-09-product-foundation/adr.md)
+- **Quiz hint engine foundation** — [PRD](../raw/feature/2026-06-09-quiz-hint-engine/prd.md) · [ADR](../raw/feature/2026-06-09-quiz-hint-engine/adr.md)
 
-- `README.md` - user-facing project overview and commands
+### Project Operations
 
-## Current Decisions
+- **Repository bootstrap** — [Notes](../raw/chore/2026-06-09-repository-bootstrap/notes.md)
+- **GitHub publication** — [Notes](../raw/chore/2026-06-09-github-publication/notes.md)
+- **Public docs cleanup** — [Notes](../raw/chore/2026-06-09-public-docs-cleanup/notes.md)
+- **LLM Wiki harness baseline** — [PRD](../raw/chore/2026-06-10-llm-wiki-harness-baseline/prd.md) · [ADR](../raw/chore/2026-06-10-llm-wiki-harness-baseline/adr.md)
 
-- Use localStorage for the MVP daily puzzle state and personal stats.
-- Do not build a full Pokemon battle simulator for the MVP.
-- Build a deterministic quiz hint engine around commands, events, ability hooks,
-  hints, and battle logs.
-- Maintain project memory through this LLM Wiki, with `AGENTS.md` as the schema.
-- Keep raw notes grouped by feature, bugfix, or chore units.
-- Published the project as public `rlatndud9090/poke-battle-quiz`.
+## Maintenance
 
-## Page Categories
-
-- `architecture/` - system shape, boundaries, and durable technical models
-- `decision/` - accepted decisions and rejected alternatives
-- `environment/` - local setup, hosting, accounts, and repository state
-- `convention/` - project process and maintenance rules
-- `reference/` - external or local research summaries
-- `session-log/` - compact chronological session records
-- `docs/raw/` - append-only source notes grouped by unit type
-- `templates/` - page templates for future maintenance
-
-## Maintenance Checklist
-
-- Add a raw note before compiling major new context.
-- Update or add the smallest relevant durable page.
-- Update this index when navigation changes.
-- Append `log.md` with the maintenance action.
-- Cite local files, raw notes, or web URLs for factual claims.
+- Add raw work units under `docs/raw/{feature,bugfix,chore}/YYYY-MM-DD-slug/`.
+- Feature units should normally include `prd.md`, `adr.md`, and optional
+  `notes.md`.
+- Bugfix and chore units may use `notes.md` only, unless a durable decision needs
+  an ADR.
+- When a raw unit is added, add exactly one navigation line here under the best
+  category.
+- Add new `docs/wiki/*.md` pages only after an accepted raw ADR says the index is
+  no longer enough.

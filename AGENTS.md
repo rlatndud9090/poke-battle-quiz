@@ -16,23 +16,23 @@ UI renders battle logs plus revealed hints.
 
 This project uses the Karpathy-style LLM Wiki pattern.
 
-- Raw sources are append-only project memory under `docs/raw/`.
-- Raw sources are grouped by branch-like work units:
-  `docs/raw/feature/`, `docs/raw/bugfix/`, and `docs/raw/chore/`.
-- The LLM-maintained wiki lives under `docs/wiki/`.
-- `docs/wiki/index.md` is the first wiki file to read in every new session.
-- `docs/wiki/log.md` is the chronological maintenance ledger.
+- Raw sources are the durable source of truth under `docs/raw/`.
+- Raw sources are grouped by branch-like work units under `docs/raw/feature/`,
+  `docs/raw/bugfix/`, and `docs/raw/chore/`.
+- Each raw work unit is a directory, not a loose session dump. Typical feature
+  units contain `prd.md`, `adr.md`, and optional `notes.md`.
+- The LLM-maintained wiki is intentionally thin: `docs/wiki/index.md` is the
+  only always-loaded wiki page.
 - `AGENTS.md` is the schema and routing contract that tells future agents how to
   use and maintain the wiki.
 
 On session start:
 
 1. Read `docs/wiki/index.md`.
-2. Read `docs/wiki/log.md`.
-3. Read any linked wiki pages relevant to the task before making architectural
-   or product decisions.
-4. Read relevant raw notes under `docs/raw/<unit-type>/` only when the compiled
-   wiki needs source-level context.
+2. Follow only the raw-unit links relevant to the task.
+3. Read `prd.md` / `adr.md` before making product or architecture decisions.
+4. Read `notes.md` only when implementation history or verification details are
+   needed.
 
 When to update the wiki:
 
@@ -44,29 +44,24 @@ When to update the wiki:
 
 Wiki maintenance rules:
 
-- Preserve raw sources. Do not rewrite existing raw files; add a new raw note
-  when context changes or a correction is needed.
-- Create raw notes per feature, bugfix, or chore unit. Do not create one large
-  session dump when a smaller unit note will preserve the decision cleanly.
-- Keep wiki pages concise, linked, and evidence-aware.
-- Separate evidence from inference. Cite local files, raw notes, or web sources
-  where possible.
-- Update `docs/wiki/index.md` whenever a durable page is added, renamed, or
-  materially changes status.
-- Append `docs/wiki/log.md` for every wiki ingest or meaningful maintenance pass.
-- Prefer `[[wiki-link]]` style links between wiki pages.
-- Keep runtime logs, metrics, and OMX state out of the wiki unless they contain a
-  durable project decision.
+- Raw units are public-safe and append-oriented. Once a PRD or ADR is accepted,
+  prefer a superseding ADR or an added note over rewriting history.
+- `docs/wiki/index.md` is navigation, not a synthesis dump. Keep it short:
+  project direction plus categorized raw-unit links.
+- Add new wiki pages only after an accepted raw ADR says the single index is no
+  longer enough.
+- Ingest is lightweight: when a raw unit is added, add or update one index line
+  under the best category. Do not add frontmatter, sync logs, rebuild scripts, or
+  stale-check machinery.
+- Keep runtime logs, metrics, and OMX state out of `docs/raw/` and `docs/wiki/`.
 
-## Current Wiki Entry Points
+## Raw Unit Templates
 
-- `docs/wiki/index.md`
-- `docs/wiki/architecture/project-overview.md`
-- `docs/wiki/architecture/quiz-hint-engine.md`
-- `docs/wiki/decision/llm-wiki-harness.md`
-- `docs/wiki/convention/raw-data-units.md`
-- `docs/wiki/reference/llm-wiki-pattern.md`
-- `docs/wiki/session-log/2026-06-09-context-bootstrap.md`
+- `docs/raw/_templates/feature-prd.md`
+- `docs/raw/_templates/feature-adr.md`
+- `docs/raw/_templates/notes.md`
+- `docs/raw/_templates/bugfix.md`
+- `docs/raw/_templates/chore.md`
 
 ## Architecture Direction
 

@@ -79,7 +79,7 @@ if (headingIndex === -1) {
   const insertAt = candidates.length ? Math.min(...candidates) : wiki.length;
   const before = wiki.slice(0, insertAt).trimEnd();
   const after = wiki.slice(insertAt);
-  wiki = `${before}\n${line}${after}`;
+  wiki = `${before}\n${line}\n${after}`;
 }
 
 writeText(wikiPath, wiki);

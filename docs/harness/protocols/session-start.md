@@ -14,3 +14,6 @@ Use this at the beginning of every agent session.
 
 Do not load every raw file by default. The wiki index is navigation; raw files
 are the detailed source of truth.
+
+If the user asks an open-ended next-work question, continue with
+`docs/harness/protocols/work-intake.md`.

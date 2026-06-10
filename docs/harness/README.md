@@ -24,6 +24,8 @@ should use branch-derived raw paths.
 ## Protocols
 
 - [Session start](protocols/session-start.md)
+- [Work intake](protocols/work-intake.md)
+- [PRD drafting](protocols/prd-drafting.md)
 - [Raw start](protocols/raw-start.md)
 - [Feature develop](protocols/feature-develop.md)
 - [Wiki ingest](protocols/wiki-ingest.md)
@@ -34,6 +36,9 @@ should use branch-derived raw paths.
 
 ## Roles
 
+- [Intake helper](roles/intake-helper.md)
+- [Unit planner](roles/unit-planner.md)
+- [PRD writer](roles/prd-writer.md)
 - [Architect](roles/architect.md)
 - [Domain engineer](roles/domain-engineer.md)
 - [UI engineer](roles/ui-engineer.md)
@@ -50,3 +55,6 @@ npm run harness:gate
 ```
 
 `harness:gate` runs the artifact check, lint, build, and test suite in sequence.
+
+For open-ended starts such as "이제 뭐하지?", use the work intake protocol before
+creating a raw unit.

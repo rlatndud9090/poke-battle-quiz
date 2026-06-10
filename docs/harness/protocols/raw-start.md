@@ -2,6 +2,9 @@
 
 Use this when starting a new feature, bugfix, or chore.
 
+If the work unit is not decided yet, use `work-intake.md` and `prd-drafting.md`
+first.
+
 ## Branch Convention
 
 Create or switch to a branch named:

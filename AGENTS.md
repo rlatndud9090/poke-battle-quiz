@@ -83,6 +83,10 @@ Before commit, run `npm run harness:gate` unless the change is so small that a
 clearly justified subset is enough. The gate runs artifact checks, lint, build,
 and tests.
 
+When the user asks an open-ended next-work question such as "이제 뭐하지?", follow
+`docs/harness/protocols/work-intake.md` before creating a branch or raw unit.
+After a candidate is accepted, use `docs/harness/protocols/prd-drafting.md`.
+
 ## Raw Unit Templates
 
 - `docs/raw/_templates/feature-prd.md`

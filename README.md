@@ -21,6 +21,7 @@ npm run dev
 npm run lint
 npm run build
 npm run test:run
+npm run harness:check
 ```
 
 개발 서버 기본 URL:
@@ -38,6 +39,8 @@ http://127.0.0.1:5173/
 - [Agent guide](AGENTS.md): 프로젝트별 에이전트 운영 규칙과 LLM Wiki 진입점
 - [LLM Wiki index](docs/wiki/index.md): 얇은 프로젝트 방향성 및 raw unit 네비게이션
 - [Raw source guide](docs/raw/README.md): feature/bugfix/chore 단위 raw 기록 규칙
+- [Cross-agent harness](docs/harness/README.md): Codex/ClaudeCode 공용 작업
+  프로토콜과 검증 스크립트
 
 ## Important Direction
 

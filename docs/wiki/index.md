@@ -30,15 +30,17 @@ Last updated: 2026-06-10 Asia/Seoul
 - **GitHub publication** — [Notes](../raw/chore/2026-06-09-github-publication/notes.md)
 - **Public docs cleanup** — [Notes](../raw/chore/2026-06-09-public-docs-cleanup/notes.md)
 - **LLM Wiki harness baseline** — [PRD](../raw/chore/2026-06-10-llm-wiki-harness-baseline/prd.md) · [ADR](../raw/chore/2026-06-10-llm-wiki-harness-baseline/adr.md)
+- **Cross-Agent Harness** — [PRD](../raw/chore/cross-agent-harness/prd.md) · [ADR](../raw/chore/cross-agent-harness/adr.md)
 
 ## Maintenance
 
-- Add raw work units under `docs/raw/{feature,bugfix,chore}/YYYY-MM-DD-slug/`.
+- Add new raw work units under `docs/raw/{feature,bugfix,chore}/branch-slug/`,
+  derived from branches like `feature/main-layout`.
 - Feature units should normally include `prd.md`, `adr.md`, and optional
   `notes.md`.
 - Bugfix and chore units may use `notes.md` only, unless a durable decision needs
   an ADR.
-- When a raw unit is added, add exactly one navigation line here under the best
-  category.
+- When a raw unit is added, run `npm run harness:ingest -- docs/raw/<type>/<slug>`
+  to add exactly one navigation line here under the best category.
 - Add new `docs/wiki/*.md` pages only after an accepted raw ADR says the index is
   no longer enough.

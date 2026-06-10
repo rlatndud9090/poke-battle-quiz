@@ -17,21 +17,27 @@ UI renders battle logs plus revealed hints.
 This project uses the Karpathy-style LLM Wiki pattern.
 
 - Raw sources are the durable source of truth under `docs/raw/`.
-- Raw sources are grouped by branch-like work units under `docs/raw/feature/`,
-  `docs/raw/bugfix/`, and `docs/raw/chore/`.
+- Raw sources are grouped by branch-derived work units under
+  `docs/raw/feature/`, `docs/raw/bugfix/`, and `docs/raw/chore/`.
+- New work branches must use `feature/<kebab-slug>`, `bugfix/<kebab-slug>`, or
+  `chore/<kebab-slug>`. The raw path mirrors the branch:
+  `feature/main-layout` -> `docs/raw/feature/main-layout/`.
 - Each raw work unit is a directory, not a loose session dump. Typical feature
   units contain `prd.md`, `adr.md`, and optional `notes.md`.
 - The LLM-maintained wiki is intentionally thin: `docs/wiki/index.md` is the
   only always-loaded wiki page.
 - `AGENTS.md` is the schema and routing contract that tells future agents how to
   use and maintain the wiki.
+- Shared cross-agent process rules live under `docs/harness/`. Tool-specific
+  files under `.claude/` and `.codex/` are adapters, not sources of truth.
 
 On session start:
 
 1. Read `docs/wiki/index.md`.
-2. Follow only the raw-unit links relevant to the task.
-3. Read `prd.md` / `adr.md` before making product or architecture decisions.
-4. Read `notes.md` only when implementation history or verification details are
+2. Read `docs/harness/protocols/session-start.md`.
+3. Follow only the raw-unit links relevant to the task.
+4. Read `prd.md` / `adr.md` before making product or architecture decisions.
+5. Read `notes.md` only when implementation history or verification details are
    needed.
 
 When to update the wiki:
@@ -50,10 +56,32 @@ Wiki maintenance rules:
   project direction plus categorized raw-unit links.
 - Add new wiki pages only after an accepted raw ADR says the single index is no
   longer enough.
-- Ingest is lightweight: when a raw unit is added, add or update one index line
-  under the best category. Do not add frontmatter, sync logs, rebuild scripts, or
-  stale-check machinery.
+- Ingest is lightweight and script-backed: when a raw unit is added, run
+  `npm run harness:ingest -- docs/raw/<type>/<slug>` to add or update one index
+  line under the best category. Do not add frontmatter, sync logs, rebuild
+  scripts, or stale-check machinery.
 - Keep runtime logs, metrics, and OMX state out of `docs/raw/` and `docs/wiki/`.
+
+## Cross-Agent Harness
+
+Follow `docs/harness/README.md` for shared process control.
+
+Key commands:
+
+```sh
+npm run harness:start -- --type feature --slug main-layout --title "Main layout"
+npm run harness:ingest -- docs/raw/feature/main-layout
+npm run harness:check
+npm run harness:gate
+```
+
+Use `harness:start` when beginning a new feature, bugfix, or chore. On a valid
+work branch it can infer the type and slug. On `main`, pass `--type` and
+`--slug` explicitly.
+
+Before commit, run `npm run harness:gate` unless the change is so small that a
+clearly justified subset is enough. The gate runs artifact checks, lint, build,
+and tests.
 
 ## Raw Unit Templates
 
@@ -102,6 +130,7 @@ Core engine boundary:
 After code changes, run the relevant subset of:
 
 ```sh
+npm run harness:check
 npm run lint
 npm run build
 npm run test:run

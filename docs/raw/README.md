@@ -9,19 +9,29 @@ thin navigation layer over these files.
 docs/raw/
   _templates/
   feature/
-    YYYY-MM-DD-short-slug/
+    branch-slug/
       prd.md
       adr.md
       notes.md
   bugfix/
-    YYYY-MM-DD-short-slug/
+    branch-slug/
       bugfix.md
       notes.md
   chore/
-    YYYY-MM-DD-short-slug/
+    branch-slug/
       notes.md
       adr.md
 ```
+
+New raw unit directories are derived from branch names:
+
+```txt
+feature/main-layout          -> docs/raw/feature/main-layout/
+bugfix/ability-trigger-order -> docs/raw/bugfix/ability-trigger-order/
+chore/cross-agent-harness    -> docs/raw/chore/cross-agent-harness/
+```
+
+Historical date-prefixed units remain as legacy records.
 
 ## Unit Types
 
@@ -31,13 +41,15 @@ docs/raw/
 
 ## Feature Development Flow
 
-1. Create `docs/raw/feature/YYYY-MM-DD-short-slug/`.
-2. Copy `docs/raw/_templates/feature-prd.md` to `prd.md`.
-3. Copy `docs/raw/_templates/feature-adr.md` to `adr.md`.
-4. Add `notes.md` from `docs/raw/_templates/notes.md` when implementation or
+1. Create or switch to `feature/<kebab-slug>`.
+2. Run `npm run harness:start -- --title "Feature title"`.
+3. Fill `docs/raw/feature/<kebab-slug>/prd.md`.
+4. Fill `docs/raw/feature/<kebab-slug>/adr.md`.
+5. Add to `notes.md` when implementation or
    verification details need to survive the session.
-5. Update `docs/wiki/index.md` with one link line under the best category.
-6. In commits, reference the raw unit path in the message body or trailer.
+6. Run `npm run harness:ingest -- docs/raw/feature/<kebab-slug>`.
+7. Run `npm run harness:check`.
+8. In commits, reference the raw unit path in the message body or trailer.
 
 ## Rules
 
@@ -46,3 +58,4 @@ docs/raw/
 - Once a PRD or ADR is accepted, prefer a superseding ADR or an added note over
   rewriting the accepted artifact.
 - Keep `docs/wiki/index.md` thin. Put details here in raw units, not in the wiki.
+- Use `docs/harness/` as the shared Codex/ClaudeCode process contract.

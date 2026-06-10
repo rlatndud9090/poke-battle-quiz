@@ -1,3 +1,3 @@
-# PRD Writer Adapter
+# PRD Writer 어댑터
 
-Follow `docs/harness/roles/prd-writer.md`.
+`docs/harness/roles/prd-writer.md`를 따른다. PRD는 한국어로 작성한다.

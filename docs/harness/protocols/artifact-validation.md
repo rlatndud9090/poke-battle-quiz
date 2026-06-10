@@ -1,24 +1,54 @@
-# Artifact Validation Protocol
+# 아티팩트 검증 프로토콜
 
-Use this before integration and commit.
+raw/wiki/harness 문서가 프로젝트 규칙을 지키는지 확인한다. 자동 검증은
+`scripts/harness/artifact-check.mjs`가 수행하고, 에이전트는 실패 원인을 읽고
+수정해야 한다.
+
+## 명령
 
 ```sh
 npm run harness:check
 ```
 
-The check verifies:
+## 자동 검증 항목
 
-- `docs/wiki/` contains only `index.md`.
-- Wiki links to raw files resolve.
-- Work branches named `feature/*`, `bugfix/*`, or `chore/*` have a matching raw
-  directory.
-- Feature raw units contain `prd.md` and `adr.md`.
-- Markdown files with frontmatter include required fields:
-  `title`, `date`, `status`, and `unit_type`.
-- Raw and wiki files remain public-safe.
+- `docs/wiki/`에는 `index.md`만 존재한다.
+- wiki의 raw link는 실제 파일을 가리킨다.
+- 모든 raw unit은 wiki index에서 찾을 수 있다.
+- work branch는 `feature/*`, `bugfix/*`, `chore/*` 형식이다.
+- work branch와 raw path가 일치한다.
+- feature raw unit에는 `prd.md`와 `adr.md`가 있다.
+- frontmatter 문서에는 `title`, `date`, `status`, `unit_type`이 있다.
+- public docs에는 금지된 출처/세션/로컬 설정 정보가 없다.
 
-Historical date-prefixed raw directories are accepted as legacy records, but new
-work should use branch-derived slugs.
+## 수동 검토 항목
 
-Dependency exact-version pinning is not enforced yet. Add a separate ADR before
-turning that policy into a failing gate.
+자동 검사가 모든 품질을 보장하지는 않는다. integrator는 아래도 확인한다.
+
+- 새 PRD/ADR/notes가 한국어로 작성되었는가?
+- PRD 수용 기준이 관찰 가능한가?
+- ADR이 placeholder 상태로 남아 있지 않은가?
+- raw unit 이름이 브랜치 핵심 내용을 설명하는가?
+- wiki가 합성 문서처럼 길어지지 않았는가?
+- 새 의존성을 추가했다면 사용자가 동의했는가?
+
+## ADR 불변성
+
+accepted ADR은 과거 결정의 근거다. 내용을 고쳐 쓰지 않는다.
+
+허용:
+
+- `status` 변경
+- superseding ADR 추가
+- notes에 후속 맥락 추가
+
+금지:
+
+- accepted ADR 본문을 현재 생각에 맞게 재작성
+- 과거 대안/기각 이유를 삭제
+- 결정 근거를 wiki에만 남기고 raw에 남기지 않기
+
+## 실패 처리
+
+검사가 실패하면 다음 단계로 진행하지 않는다. 실패 항목을 수정한 뒤
+`harness:check`를 다시 실행한다.

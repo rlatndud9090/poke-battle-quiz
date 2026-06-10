@@ -1,11 +1,9 @@
 # /artifact-check
 
-Validate raw/wiki harness artifacts.
-
-Use:
+raw/wiki/harness 아티팩트를 검증한다.
 
 ```sh
 npm run harness:check
 ```
 
-The canonical protocol is `docs/harness/protocols/artifact-validation.md`.
+공용 기준은 `docs/harness/protocols/artifact-validation.md`다.

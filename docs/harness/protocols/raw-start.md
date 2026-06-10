@@ -1,13 +1,16 @@
-# Raw Start Protocol
+# Raw 시작 프로토콜
 
-Use this when starting a new feature, bugfix, or chore.
+작업 단위가 확정된 뒤 raw source를 생성할 때 사용한다. 작업 단위가 아직
+정해지지 않았다면 먼저 `work-intake.md`와 `prd-drafting.md`를 사용한다.
 
-If the work unit is not decided yet, use `work-intake.md` and `prd-drafting.md`
-first.
+## 목적
 
-## Branch Convention
+- branch 이름과 raw path를 1:1로 맞춘다.
+- 작업 시작 시 PRD/ADR/notes의 위치를 고정한다.
+- 이후 wiki ingest, artifact check, commit trailer가 같은 work unit id를
+  가리키게 만든다.
 
-Create or switch to a branch named:
+## 브랜치 규칙
 
 ```txt
 feature/<kebab-case-purpose>
@@ -15,32 +18,53 @@ bugfix/<kebab-case-purpose>
 chore/<kebab-case-purpose>
 ```
 
-The slug must communicate the core work. Avoid vague names such as `misc`,
-`update`, `changes`, `fix`, or `work`.
+좋은 예:
 
-## Command
-
-```sh
-npm run harness:start -- --type feature --slug ability-trigger-system --title "Ability trigger system"
+```txt
+feature/quiz-platform-shell
+feature/ability-trigger-system
+bugfix/stat-stage-clamp
+chore/intake-helper-harness
 ```
 
-When run on a valid work branch, `harness:start` can infer the type and slug from
-the branch name. On `main`, pass `--type` and `--slug` explicitly.
+나쁜 예:
 
-## Output
+```txt
+feature/update
+feature/misc
+bugfix/fix
+chore/work
+```
 
-- `feature/*`: creates `prd.md`, `adr.md`, and `notes.md`.
-- `bugfix/*`: creates `bugfix.md` and `notes.md`.
-- `chore/*`: creates `notes.md`.
+## 명령
 
-Durable chore decisions may add `prd.md` and `adr.md` manually when the work
-changes project process or architecture.
+현재 브랜치가 유효하면 type과 slug를 추론한다.
 
-## Completion
+```sh
+npm run harness:start -- --title "퀴즈 플랫폼 쉘"
+```
 
-After the raw unit is ready, run:
+`main`에서 미리 만들 때는 명시한다.
+
+```sh
+npm run harness:start -- --type feature --slug quiz-platform-shell --title "퀴즈 플랫폼 쉘"
+```
+
+## 생성 파일
+
+| type | 생성 파일 |
+| --- | --- |
+| `feature` | `prd.md`, `adr.md`, `notes.md` |
+| `bugfix` | `bugfix.md`, `notes.md` |
+| `chore` | `notes.md` |
+
+chore라도 프로젝트 방향이나 하네스 정책을 바꾸면 PRD/ADR을 추가할 수 있다.
+
+## 완료 조건
 
 ```sh
 npm run harness:ingest -- docs/raw/<type>/<slug>
 npm run harness:check
 ```
+
+`harness:check`는 현재 브랜치와 raw path가 맞는지 확인한다.

@@ -1,28 +1,28 @@
 ---
-title: "Bugfix title"
+title: "버그 수정 제목"
 date: "YYYY-MM-DD"
 status: draft # draft | review | fixed | rejected
 unit_type: bugfix
 ---
 
-# Bugfix: Bugfix title
+# Bugfix: 버그 수정 제목
 
-## Symptom
+## 증상
 
-What failed?
+무엇이 실패했는가?
 
-## Impact
+## 영향
 
-Who or what was affected?
+누구 또는 무엇이 영향을 받았는가?
 
-## Root Cause
+## 원인
 
-What evidence explains the failure?
+어떤 근거가 실패 원인을 설명하는가?
 
-## Fix
+## 수정
 
-What changed?
+무엇을 바꿨는가?
 
-## Regression Coverage
+## 회귀 방지
 
-- [ ] Test or verification that prevents recurrence.
+- [ ] 재발을 막는 테스트 또는 검증.

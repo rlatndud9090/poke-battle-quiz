@@ -32,6 +32,7 @@ Last updated: 2026-06-10 Asia/Seoul
 - **LLM Wiki harness baseline** — [PRD](../raw/chore/2026-06-10-llm-wiki-harness-baseline/prd.md) · [ADR](../raw/chore/2026-06-10-llm-wiki-harness-baseline/adr.md)
 - **Cross-Agent Harness** — [PRD](../raw/chore/cross-agent-harness/prd.md) · [ADR](../raw/chore/cross-agent-harness/adr.md)
 - **Intake helper harness** — [Notes](../raw/chore/intake-helper-harness/notes.md)
+- **하네스 강도와 한국어 원칙 보강** — [Notes](../raw/chore/harness-parity-language/notes.md)
 
 ## Maintenance
 

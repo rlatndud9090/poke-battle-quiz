@@ -1,14 +1,12 @@
 ---
 name: artifact-check
-description: "Validate raw/wiki harness artifacts through the shared harness."
+description: "raw/wiki/harness 아티팩트 정합성을 검증한다."
 ---
 
-# Artifact Check Adapter
-
-Run:
+# Artifact Check 어댑터
 
 ```sh
 npm run harness:check
 ```
 
-Protocol: `docs/harness/protocols/artifact-validation.md`.
+공용 기준은 `docs/harness/protocols/artifact-validation.md`다.

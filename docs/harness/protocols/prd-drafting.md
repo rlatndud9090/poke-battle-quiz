@@ -1,47 +1,74 @@
-# PRD Drafting Protocol
+# PRD 작성 프로토콜
 
-Use this after work intake selects a candidate.
+작업 인테이크에서 후보가 선택된 뒤 사용한다. PRD는 구현 지시서가 아니라
+"왜 이 작업을 하는가, 무엇이 완료인가, 무엇은 하지 않는가"를 보존하는
+제품 아티팩트다.
 
-The goal is to create a strong PRD draft that a human can approve or edit before
-implementation.
+## 언어
 
-## Input
+PRD는 한국어로 작성한다. branch name, file path, command, TypeScript
+identifier처럼 기계가 읽거나 코드와 직접 연결되는 표현만 영어를 유지한다.
 
-- Accepted work-unit candidate.
-- Relevant raw PRD/ADR files.
-- Current product direction from `docs/wiki/index.md`.
+## 입력
 
-## Output
+- 선택된 작업 후보
+- 관련 raw PRD/ADR/notes
+- `docs/wiki/index.md`의 현재 제품 방향
+- 필요한 경우 현재 코드 구조
 
-Draft these sections:
+## 필수 섹션
 
-- Problem
-- Goals
-- Non-Goals
-- Requirements
-- Acceptance Criteria
-- Open Questions
+```md
+## 문제
+## 목표
+## 비목표
+## 요구사항
+## 수용 기준
+## 열린 질문
+## ADR 필요 여부
+## 링크
+```
 
-The draft must be specific enough for `harness:start` and feature development.
+## 작성 기준
 
-## Rules
+- 문제는 사용자 또는 프로젝트 관점의 긴장을 설명한다.
+- 목표는 이 작업이 달성해야 하는 결과를 적는다.
+- 비목표는 범위 팽창을 막기 위해 구체적으로 적는다.
+- 요구사항은 구현자가 관찰할 수 있는 형태로 적는다.
+- 수용 기준은 검증자가 통과/실패를 판단할 수 있어야 한다.
+- 열린 질문은 숨은 가정으로 묻지 말고 명시한다.
+- ADR이 필요하면 어떤 결정을 내려야 하는지 적는다.
 
-- Keep requirements observable.
-- Separate product goals from implementation details.
-- Record unresolved uncertainty as open questions, not hidden assumptions.
-- If the candidate is architectural, also flag whether an ADR is required.
-- For quiz features, describe the player-facing quiz experience and the data or
-  domain behavior needed to support it.
+## 품질 게이트
+
+PRD 초안은 아래 질문에 답할 수 있어야 한다.
+
+- 왜 지금 이 작업인가?
+- 이 작업이 끝났다고 어떻게 판단하는가?
+- 어떤 일은 일부러 하지 않는가?
+- 다음 작업 단위와 어떻게 연결되는가?
+- 구현자가 설계 결정을 별도로 ADR에 남겨야 하는가?
+
+## 실패 모드
+
+- **나쁨:** "플랫폼 쉘을 만든다"처럼 선언만 있고 수용 기준이 없다.
+- **좋음:** "사용자가 앱을 열었을 때 여러 퀴즈 모드를 제공하는 사이트임을 이해한다"처럼 관찰 가능한 기준을 둔다.
+
+- **나쁨:** 구현 세부를 PRD에서 모두 확정한다.
+- **좋음:** 제품 요구는 PRD에, 구조 선택은 ADR에 남긴다.
+
+- **나쁨:** 불확실한 부분을 임의로 확정한다.
+- **좋음:** 열린 질문으로 남기고 다음 ADR/논의에서 해결한다.
 
 ## Handoff
 
-When the user approves the draft:
+사용자가 PRD 방향을 승인하면:
 
 ```sh
-npm run harness:start -- --type <type> --slug <slug> --title "<title>"
+npm run harness:start -- --type <type> --slug <slug> --title "<한국어 제목>"
 ```
 
-Then fill the created raw artifact with the approved draft and run:
+생성된 raw artifact를 채운 뒤:
 
 ```sh
 npm run harness:ingest -- docs/raw/<type>/<slug>

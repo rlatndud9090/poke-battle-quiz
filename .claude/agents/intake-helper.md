@@ -1,3 +1,3 @@
-# Intake Helper Adapter
+# Intake Helper 어댑터
 
-Follow `docs/harness/roles/intake-helper.md`.
+`docs/harness/roles/intake-helper.md`를 따른다. 후보 승인 전 raw unit을 만들지 않는다.

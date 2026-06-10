@@ -1,16 +1,16 @@
 ---
 name: work-intake
-description: "Use when the user asks what to do next, says '이제 뭐하지?', or wants an idea turned into branch-sized work units and a PRD draft."
+description: "사용자가 다음 작업을 묻거나 넓은 아이디어를 branch-sized work unit과 PRD 초안으로 바꾸길 원할 때 사용한다."
 ---
 
-# Work Intake Adapter
+# Work Intake 어댑터
 
-Use the shared harness:
+사용 순서:
 
 1. `docs/harness/protocols/work-intake.md`
 2. `docs/harness/roles/intake-helper.md`
 3. `docs/harness/roles/unit-planner.md`
-4. `docs/harness/protocols/prd-drafting.md` when drafting the selected unit
+4. 후보 선택 후 `docs/harness/protocols/prd-drafting.md`
 5. `docs/harness/roles/prd-writer.md`
 
-Do not fork intake rules into `.codex`; update `docs/harness` first.
+사용자 승인 전에는 raw unit을 생성하지 않는다.

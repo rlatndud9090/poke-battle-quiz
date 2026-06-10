@@ -12,6 +12,14 @@ The MVP is not a full battle simulator. It should use a small deterministic quiz
 hint engine: commands emit events, abilities react through explicit hooks, and the
 UI renders battle logs plus revealed hints.
 
+## Language Policy
+
+Project-authored documents are written in Korean by default. This includes
+`docs/raw/`, `docs/wiki/`, `docs/harness/`, PRDs, ADRs, notes, and agent-facing
+workflow documents. Keep code identifiers, branch names, file paths, commands,
+package names, and protocol keywords in English when that is the natural or
+machine-readable form.
+
 ## LLM Wiki Harness
 
 This project uses the Karpathy-style LLM Wiki pattern.

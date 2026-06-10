@@ -1,5 +1,5 @@
 ---
-title: "Decision title"
+title: "결정 제목"
 date: "YYYY-MM-DD"
 status: proposed # proposed | accepted | deprecated | superseded
 related_prd: "./prd.md"
@@ -7,30 +7,30 @@ unit_type: feature
 supersedes:
 ---
 
-# ADR: Decision title
+# ADR: 결정 제목
 
-## Context
+## 맥락
 
-What constraints, evidence, and goals shaped this decision?
+이 결정을 만든 제약, 근거, 목표는 무엇인가?
 
-## Decision
+## 결정
 
-What did we decide?
+무엇을 결정했는가?
 
-## Alternatives
+## 대안
 
-- Option considered: why it was accepted or rejected.
+- 고려한 선택지: 채택하거나 기각한 이유.
 
-## Consequences
+## 결과
 
-### Positive
+### 긍정적 영향
 
-- Outcome
+- 결과
 
-### Negative / Trade-Offs
+### 부정적 영향 / 트레이드오프
 
-- Trade-off
+- 트레이드오프
 
-## Verification
+## 검증
 
-- How this decision will be validated.
+- 이 결정을 어떻게 검증할 것인가.

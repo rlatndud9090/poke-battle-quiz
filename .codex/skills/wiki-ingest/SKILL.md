@@ -1,14 +1,12 @@
 ---
 name: wiki-ingest
-description: "Update docs/wiki/index.md from a raw work unit through the shared harness."
+description: "raw work unit을 docs/wiki/index.md에 연결한다."
 ---
 
-# Wiki Ingest Adapter
-
-Run:
+# Wiki Ingest 어댑터
 
 ```sh
 npm run harness:ingest -- docs/raw/<type>/<slug>
 ```
 
-Protocol: `docs/harness/protocols/wiki-ingest.md`.
+공용 기준은 `docs/harness/protocols/wiki-ingest.md`다.

@@ -1,25 +1,25 @@
 ---
-title: "Chore title"
+title: "정리 작업 제목"
 date: "YYYY-MM-DD"
 status: draft # draft | done | rejected
 unit_type: chore
 ---
 
-# Chore: Chore title
+# Chore: 정리 작업 제목
 
-## Context
+## 맥락
 
-Why is this maintenance work needed?
+이 유지보수 작업이 왜 필요한가?
 
-## Scope
+## 범위
 
-- In scope
-- Out of scope
+- 범위에 포함
+- 범위에서 제외
 
-## Decisions
+## 결정
 
-- Decision
+- 결정
 
-## Verification
+## 검증
 
-- Command or evidence
+- 명령 또는 근거

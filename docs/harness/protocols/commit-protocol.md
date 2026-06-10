@@ -1,33 +1,59 @@
-# Commit Protocol
+# 커밋 프로토콜
 
-This project uses the Lore Commit Protocol from `AGENTS.md`.
+이 프로젝트는 `AGENTS.md`의 Lore Commit Protocol을 따른다. 커밋은 단순
+라벨이 아니라 raw artifact와 연결되는 결정 기록이다.
 
-## Before Commit
+## 커밋 전 조건
 
-1. Run `npm run harness:gate` or the equivalent sequence.
-2. Stage only the files that belong to the work unit.
-3. Inspect `git diff --staged`.
-4. Include the raw unit path in the commit body or a `Related:` trailer.
+1. `npm run harness:gate` 통과.
+2. `git status --short`로 변경 파일 확인.
+3. 관련 파일만 명시적으로 stage.
+4. `git diff --cached --check` 통과.
+5. `git diff --cached`로 민감 정보와 범위 확인.
 
-Avoid broad staging commands when unrelated files exist. Prefer explicit paths.
+## 스테이징 규칙
 
-## Message Shape
+권장:
+
+```sh
+git add src/domain docs/raw/feature/foo docs/wiki/index.md
+```
+
+주의:
+
+- unrelated file을 stage하지 않는다.
+- `.env`, local config, runtime log, 임시 파일을 stage하지 않는다.
+- 넓은 `git add -A`는 작업트리가 완전히 이해된 경우에만 사용한다.
+
+## 메시지 형식
 
 ```txt
-<intent line: why this change exists>
+<왜 이 변경을 했는지>
 
-<context and rationale>
+<맥락과 접근 이유>
 
-Constraint: <external constraint>
-Rejected: <alternative> | <reason>
+Constraint: <제약>
+Rejected: <기각한 대안> | <기각 이유>
 Confidence: <low|medium|high>
 Scope-risk: <narrow|moderate|broad>
-Directive: <future-facing warning>
-Tested: <verification performed>
-Not-tested: <known gap>
+Directive: <미래 수정자를 위한 지시>
+Tested: <검증>
+Not-tested: <검증하지 못한 것>
 Related: docs/raw/<type>/<slug>/
 Co-authored-by: OmX <omx@oh-my-codex.dev>
 ```
 
-Use trailers that add value. `Co-authored-by: OmX <omx@oh-my-codex.dev>` is
-required by the local hook.
+## 필수/권장 trailer
+
+- `Tested:`는 반드시 실제 실행한 검증을 적는다.
+- `Not-tested:`는 빈말로 쓰지 말고 알려진 공백을 적는다.
+- `Related:`에는 raw unit 경로를 적는다.
+- `Co-authored-by: OmX <omx@oh-my-codex.dev>`는 hook 요구사항이다.
+
+## 실패 모드
+
+- **나쁨:** "update docs" 같은 제목으로 맥락 없이 커밋한다.
+- **좋음:** 왜 하네스나 기능 방향이 바뀌었는지 제목과 본문에 남긴다.
+
+- **나쁨:** 검증하지 않았는데 `Tested: all`이라고 쓴다.
+- **좋음:** `Tested: npm run harness:gate`, `Not-tested: browser smoke`처럼 정직하게 쓴다.

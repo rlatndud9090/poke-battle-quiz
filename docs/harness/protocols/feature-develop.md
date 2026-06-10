@@ -1,36 +1,130 @@
-# Feature Develop Protocol
+# 기능 개발 프로토콜
 
-This is the shared feature workflow for Codex and ClaudeCode.
+PRD/ADR 기반으로 기능을 설계, 구현, 검증, 커밋까지 진행하는 공용
+오케스트레이션 절차다. `html-editor-fe`의 강도는 유지하되, 이 프로젝트의
+도메인인 포켓몬 퀴즈 플랫폼과 deterministic hint engine에 맞춘다.
 
-## Entry
-
-Input is a branch-derived raw unit:
+## 입력과 출력
 
 ```txt
-docs/raw/feature/<slug>/
+입력: docs/raw/feature/<slug>/prd.md
+출력: 구현 완료 + wiki ingest + harness gate 통과 + Lore commit
 ```
 
-The feature unit must have `prd.md` and `adr.md` before implementation. `notes.md`
-is used for durable implementation and verification notes.
+feature raw unit은 `prd.md`, `adr.md`, `notes.md`를 가진다. ADR이 아직
+proposed라면 구현 전에 결정 내용을 채우고 accepted로 바꾸거나, 사용자 리뷰가
+필요하면 구현을 멈춘다.
 
-## Flow
+## 역할
 
-1. Session start: read `AGENTS.md`, `docs/wiki/index.md`, and the feature raw
-   unit.
-2. Architect: confirm scope, write or update the ADR while it is still proposed,
-   and define the implementation boundary.
-3. Domain engineer: implement deterministic quiz engine behavior under
-   `src/domain`.
-4. UI engineer: implement React surfaces under `src/ui` or existing app
-   boundaries.
-5. Test engineer: add or update reducer, effect, and UI tests according to risk.
-6. Integrator: run `wiki-ingest`, `artifact-check`, lint, build, tests, and the
-   commit protocol.
+| 역할 | 책임 |
+| --- | --- |
+| `architect` | PRD 분석, ADR 작성, 구현 계획, 인터페이스 경계 정의 |
+| `domain-engineer` | `src/domain`의 순수 상태/명령/힌트/특성 트리거 구현 |
+| `ui-engineer` | React 화면, 모드 shell, 로그, 입력, 반응형 UI 구현 |
+| `test-engineer` | 도메인/통합/UI 검증 전략과 테스트 구현 |
+| `integrator` | raw/wiki 검증, gate 실행, 커밋 프로토콜 |
 
-## Boundaries
+## Phase 0: 실행 모드 결정
 
-- The MVP is not a full battle simulator.
-- Ability behavior should use trigger/effect hooks rather than scattered
-  conditionals.
-- React owns rendering. `src/domain` owns serializable state and pure reducers.
-- Public docs must not preserve unnecessary third-party source provenance.
+1. 현재 branch와 raw path를 확인한다.
+2. `docs/raw/feature/<slug>/prd.md`와 `adr.md`를 읽는다.
+3. 사용자 요청이 신규 구현, 재작업, 부분 수정, PRD 보강 중 무엇인지 분류한다.
+4. 분류 결과를 한 줄로 보고한다.
+
+| 조건 | 실행 모드 | 동작 |
+| --- | --- | --- |
+| 구현 전 PRD/ADR만 있음 | 초기 실행 | Phase 1부터 진행 |
+| 구현이 일부 있음 + 같은 PRD | 개선 실행 | 변경 범위만 재계획 |
+| 특정 모듈만 수정 | 부분 실행 | 해당 role 중심으로 진행 |
+| ADR 결정이 바뀜 | 새 결정 | 기존 ADR superseded 또는 새 ADR 작성 |
+
+## Phase 1: 설계
+
+담당: `architect`
+
+1. `AGENTS.md`, `docs/wiki/index.md`, feature PRD/ADR을 읽는다.
+2. 관련 raw unit과 현재 코드 구조를 조사한다.
+3. ADR에 아래 결정을 기록한다.
+   - 채택한 구조
+   - 대안 최소 2개
+   - 기각 이유
+   - 검증 방법
+4. 구현 계획을 notes 또는 별도 계획 섹션에 남긴다.
+   - domain 작업
+   - UI 작업
+   - 테스트 작업
+   - 파일 경계
+   - 위험 요소
+
+게이트:
+
+- ADR이 proposed placeholder 상태이면 구현으로 넘어가지 않는다.
+- 사용자의 제품 판단이 필요한 질문은 숨기지 않고 보고한다.
+
+## Phase 2: 구현
+
+담당: `domain-engineer`, `ui-engineer`
+
+domain 작업:
+
+- React 의존 없이 순수 TypeScript로 작성한다.
+- 명령, 이벤트, 상태 패치, 힌트, 로그를 분리한다.
+- 특성은 reducer 내부 조건문이 아니라 trigger/effect 정의로 모델링한다.
+
+UI 작업:
+
+- UI는 domain state를 렌더링한다.
+- shell, navigation, mode metadata는 quiz-specific domain logic과 분리한다.
+- 모바일/데스크톱에서 텍스트와 컨트롤이 겹치지 않아야 한다.
+
+## Phase 3: 테스트
+
+담당: `test-engineer`
+
+- 도메인 로직은 Vitest 단위 테스트를 우선한다.
+- UI 변경은 렌더링/상호작용 테스트 또는 명시적 브라우저 검증을 남긴다.
+- 테스트가 아직 없는 영역이면 최소 smoke coverage를 추가하거나, 못 하는 이유를
+  notes에 남긴다.
+
+## Phase 4: 통합
+
+담당: `integrator`
+
+```sh
+npm run harness:ingest -- docs/raw/feature/<slug>
+npm run harness:gate
+```
+
+성공 후 명시적 파일만 stage하고 Lore commit을 작성한다.
+
+## 실패 모드
+
+- **나쁨:** ADR placeholder를 둔 채 구현한다.
+- **좋음:** route/state, mode registry, engine boundary 같은 결정을 ADR에 남긴 뒤 구현한다.
+
+- **나쁨:** UI가 battle mode 전용 구조를 전역 shell에 박아 넣는다.
+- **좋음:** mode registry와 mode entry surface를 분리한다.
+
+- **나쁨:** 특성 트리거를 reducer 조건문으로 계속 추가한다.
+- **좋음:** AbilityDefinition과 trigger/effect로 확장한다.
+
+## 출력 형식
+
+```md
+## 설계 요약
+- ADR 결정:
+- 대안/기각:
+
+## 구현 요약
+- domain:
+- UI:
+- tests:
+
+## 검증
+- harness:
+- lint/build/test:
+
+## 남은 위험
+- risk:
+```

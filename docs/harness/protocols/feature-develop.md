@@ -44,13 +44,17 @@ feature raw unit은 `prd.md`, `adr.md`, `notes.md`를 가진다. 에이전트는
 
 | 조건 | 레일 |
 | --- | --- |
-| 구조, 데이터, engine, harness, dependency, 다중 모듈 변경 | `$ralplan` 필수 |
+| 구조, 데이터, engine, dependency, 다중 모듈 변경 | `$ralplan` 필수 |
 | 승인된 branch-sized 구현 | `$ralph` 기본 |
 | 오타, 링크, 한 파일의 작은 문서 수정 | solo execute 허용 |
 
 `$ralplan`은 계획/합의 게이트이므로 직접 구현하지 않는다. `$ralph`는 승인된
 PRD/ADR 또는 `$ralplan` 산출물을 기준으로 구현과 검증을 완료하는 기본 실행
 레일이다.
+
+하네스 변경은 이 PRD/ADR 기반 기능 개발 레일의 대상이 아니다. 하네스는
+developer-only chore로 직접 수정하고 Notes raw unit, wiki ingest, gate, commit으로
+추적한다.
 
 ## Phase 1: 설계
 

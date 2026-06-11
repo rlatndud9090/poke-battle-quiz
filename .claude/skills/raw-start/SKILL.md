@@ -16,5 +16,6 @@ npm run harness:start -- --title "<한국어 제목>"
 현재 브랜치가 `main`이거나 유효한 work branch가 아니면 `--type`, `--slug`를
 명시한다.
 
-작업 단위가 아직 확정되지 않았으면 먼저 `$do-next`를 사용한다. 제품/구조/하네스
-정책 변경이면 notes-only로 끝내지 말고 PRD/ADR 필요성을 검토한다.
+작업 단위가 아직 확정되지 않았으면 먼저 `$do-next`를 사용한다. 제품/도메인
+결정이면 PRD/ADR 필요성을 검토하고, developer-only 하네스 변경은 chore Notes로
+추적한다.

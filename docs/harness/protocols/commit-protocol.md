@@ -6,7 +6,9 @@ diff 라벨이 아니라 raw PRD/ADR/notes와 연결되는 결정 기록이다.
 ## 적용 원칙
 
 - 하나의 논리적 작업 단위는 하나의 커밋으로 묶는다.
-- 의미 있는 제품, 아키텍처, 구현, 하네스 정책 변경은 관련 PRD와 ADR을 가진다.
+- 의미 있는 제품, 아키텍처, 구현 변경은 관련 PRD와 ADR을 가진다.
+- 하네스 정책 변경은 개발자 운영 구조 변경으로 보고 제품 PRD/ADR 자동구현 레일에
+  넣지 않는다. raw Notes와 commit protocol로 추적한다.
 - 커밋 본문에는 `관련 문서:` 블록을 반드시 둔다.
 - Lore trailer는 커밋의 제약, 검증, 위험, raw unit 연결을 남기는 데 사용한다.
 - 검증하지 않은 내용을 `Tested:`에 쓰지 않는다.
@@ -36,11 +38,16 @@ diff 라벨이 아니라 raw PRD/ADR/notes와 연결되는 결정 기록이다.
 - 사용자 경험, 제품 요구사항, 퀴즈 규칙 변경
 - domain/data/UI 구조 변경
 - ability trigger, command, hint, daily puzzle 같은 엔진 경계 변경
-- cross-agent harness, commit protocol, raw/wiki 정책 변경
 - 새 dependency, data source, generated data pipeline 결정
 
-작고 결정이 없는 notes-only chore/bugfix는 예외로 허용한다. 이 경우에도
-`관련 문서:` 블록을 생략하지 않는다.
+아래 변경은 기본적으로 Notes 링크를 사용한다.
+
+- cross-agent harness, commit protocol, raw/wiki 운영 정책 변경
+- Codex/ClaudeCode adapter, skill, command, role prompt 변경
+- 개발자 workflow만 바꾸고 제품/도메인 동작을 바꾸지 않는 하네스 변경
+
+developer-only harness chore와 작고 결정이 없는 chore/bugfix는 notes-only로
+허용한다. 이 경우에도 `관련 문서:` 블록을 생략하지 않는다.
 
 ```md
 관련 문서:
@@ -48,8 +55,8 @@ diff 라벨이 아니라 raw PRD/ADR/notes와 연결되는 결정 기록이다.
 ```
 
 예외를 쓰는 커밋은 본문이나 `Constraint:`에 PRD/ADR이 필요 없었던 이유를 적는다.
-작업 중 durable decision이 생기면 notes-only 예외를 중단하고 PRD/ADR 또는 ADR을
-추가한다.
+작업 중 제품/도메인 durable decision이 생기면 notes-only 예외를 중단하고 PRD/ADR
+또는 ADR을 추가한다.
 
 ## 품질 게이트
 

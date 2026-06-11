@@ -29,8 +29,9 @@ Codex는 공용 하네스의 `$do-next` 흐름을 따른다.
 
 승인된 PRD/ADR 이후 구현 요청이 오면:
 
-- 구조, 데이터, engine, harness, dependency, 다중 모듈 변경은 `$ralplan`을 먼저 사용한다.
+- 구조, 데이터, engine, dependency, 다중 모듈 변경은 `$ralplan`을 먼저 사용한다.
 - 승인된 branch-sized 구현은 `$ralph`를 기본 실행 레일로 사용한다.
+- developer-only 하네스 변경은 `$do-next`/제품 PRD/ADR 레일이 아니라 chore Notes로 추적한다.
 - 작은 문서/오타/국소 수정만 solo execute를 허용한다.
 
 규칙 변경은 `.codex`가 아니라 `docs/harness`를 먼저 수정한다.

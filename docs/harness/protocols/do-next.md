@@ -1,8 +1,9 @@
 # Do Next 프로토콜
 
-`$do-next`는 열린 아이디어를 하나의 branch-sized 작업 단위와 승인된
+`$do-next`는 제품/도메인 아이디어를 하나의 branch-sized 작업 단위와 승인된
 PRD/ADR로 바꾸는 표준 진입점이다. 이 프로토콜은 구현하지 않는다. 구현은
-PRD/ADR 승인 이후 별도 요청에서 시작한다.
+PRD/ADR 승인 이후 별도 요청에서 시작한다. 하네스 변경은 개발자 운영 구조
+변경이므로 `$do-next` 대상이 아니다.
 
 ## 목적
 
@@ -102,7 +103,7 @@ approval: "user:YYYY-MM-DD:<짧은 승인 근거>"
 
 | 조건 | 필수/기본 레일 |
 | --- | --- |
-| 구조, 데이터, engine, harness, dependency, 다중 모듈 변경 | `$ralplan` 필수 |
+| 구조, 데이터, engine, dependency, 다중 모듈 변경 | `$ralplan` 필수 |
 | 승인된 branch-sized 구현 | `$ralph` 기본 |
 | 오타, 링크, 한 파일의 작은 문서 수정 | solo execute 허용 |
 

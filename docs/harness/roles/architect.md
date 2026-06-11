@@ -21,7 +21,8 @@
     - 데이터 계약, quiz engine, ability trigger, UI rendering 책임이 분리되어 있다.
     - 새 dependency, data source, generated data, route/storage 결정은 ADR에 근거가 있다.
     - 구현자가 바로 작업할 수 있는 파일 경계와 완료 기준이 있다.
-    - notes-only 작업 중 durable decision이 생기면 PRD/ADR 보강을 요청한다.
+    - notes-only 작업 중 제품/도메인 durable decision이 생기면 PRD/ADR 보강을 요청한다.
+    - developer-only 하네스 변경은 제품 PRD/ADR 레일 밖의 chore Notes로 둔다.
   </Success_Criteria>
 
   <Constraints>

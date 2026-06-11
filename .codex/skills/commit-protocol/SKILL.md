@@ -30,8 +30,9 @@ git diff --cached
 [ADR](docs/raw/<type>/<slug>/adr.md)
 ```
 
-notes-only 예외는 작고 결정이 없는 chore/bugfix에만 허용한다. 그 경우에도
-`관련 문서:` 블록에 `[Notes](...)`를 넣고 `Related:` trailer를 유지한다.
+notes-only는 developer-only 하네스 chore와 작고 결정이 없는 chore/bugfix에
+허용한다. 그 경우에도 `관련 문서:` 블록에 `[Notes](...)`를 넣고 `Related:`
+trailer를 유지한다.
 
 ## 금지
 

@@ -90,9 +90,10 @@ work branch it can infer the type and slug. On `main`, pass `--type` and
 Before commit, follow `docs/harness/protocols/commit-protocol.md`. Run
 `npm run harness:gate` unless the change is so small that a clearly justified
 subset is enough. The gate runs artifact checks, lint, build, and tests.
-Commit bodies must include a `관련 문서:` block with PRD/ADR links for product,
-architecture, implementation, data, or harness policy changes. Use notes-only
-links only for small maintenance work without a durable decision.
+Commit bodies must include a `관련 문서:` block. Use PRD/ADR links for product,
+architecture, implementation, or data changes. Developer-only harness changes
+stay outside the product PRD/ADR automation lane and use raw Notes links unless
+they also change product/domain architecture.
 Agents may draft PRDs and ADRs, but must not mark PRDs as `approved` or ADRs as
 `accepted` without explicit user approval. Approved PRDs and accepted ADRs must
 include `approval: "user:YYYY-MM-DD:<reason>"` frontmatter. Legacy approved or
@@ -105,9 +106,16 @@ When the user asks an open-ended next-work question such as "이제 뭐하지?",
 through `$do-next` before creating a branch or raw unit.
 
 After PRD/ADR approval, implementation is a separate request. Use `$ralplan`
-first for structural, data, engine, harness, dependency, or multi-module
-changes. Use `$ralph` as the default execution lane for approved branch-sized
+first for structural, data, engine, dependency, or multi-module changes. Use
+`$ralph` as the default execution lane for approved branch-sized
 implementation, with solo execution reserved for small local edits.
+
+Harness changes are developer operating-structure work, not product planning
+work. Do not route harness maintenance through `$do-next`, product PRD/ADR
+approval, or PRD/ADR-based implementation automation unless the user explicitly
+asks to treat a harness change as a product-facing decision. Track ordinary
+harness changes with a chore raw Notes unit, wiki ingest, `harness:gate`, and
+the commit protocol.
 
 ## Raw Unit Templates
 

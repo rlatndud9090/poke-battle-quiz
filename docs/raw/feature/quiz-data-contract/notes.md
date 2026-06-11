@@ -2,7 +2,7 @@
 
 Date: 2026-06-11 Asia/Seoul
 Unit type: feature
-Status: done
+Status: review
 
 ## 맥락
 
@@ -10,6 +10,8 @@ Status: done
 - 유저 행동은 정답 입력, 내가 기술 사용하기, 상대가 기술 사용하기로 시작한다.
 - 하나의 행동은 하나의 턴으로 계산되어야 한다.
 - 검증 불가능한 특성은 정답 후보에서 제외하고, 검증 가능한 행동이 추가되면 다시 편입한다.
+- 현재 PRD/ADR은 에이전트 초안이며, 형님의 명시 승인 전까지 PRD는 `review`,
+  ADR은 `proposed` 상태로 둔다.
 
 ## 결정
 
@@ -28,6 +30,7 @@ Status: done
 
 ## 후속 작업
 
+- 형님 검토 후 PRD를 `approved`, ADR을 `accepted`로 전환한다.
 - ability trigger system에서 `AbilityDefinition.rules`를 실제 이벤트 처리로 연결한다.
 - daily battle loop에서 행동/턴/공유 결과를 구현한다.
 - 전체 9세대 learnset이 필요해지는 시점에 generated data pipeline을 별도 ADR로 결정한다.

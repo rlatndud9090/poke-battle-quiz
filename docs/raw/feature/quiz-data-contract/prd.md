@@ -1,7 +1,7 @@
 ---
 title: "퀴즈 데이터 계약"
 date: "2026-06-11"
-status: approved # draft | review | approved | rejected
+status: review # draft | review | approved | rejected
 unit_type: feature
 branch: "feature/quiz-data-contract"
 raw_path: "docs/raw/feature/quiz-data-contract"

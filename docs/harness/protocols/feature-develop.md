@@ -1,8 +1,8 @@
 # 기능 개발 프로토콜
 
 승인된 PRD/ADR 기반으로 기능을 설계, 구현, 검증, 커밋까지 진행하는 공용
-오케스트레이션 절차다. `html-editor-fe`의 강도는 유지하되, 이 프로젝트의
-도메인인 1일 1회 배틀형 포켓몬 추리 퀴즈와 deterministic hint engine에 맞춘다.
+오케스트레이션 절차다. `html-editor-fe` 수준의 강도는 유지하되, 도메인 특수성은
+소비 프로젝트의 PRD/ADR과 `AGENTS.md`가 제공한다고 가정한다.
 
 ## 입력과 출력
 
@@ -20,8 +20,8 @@ feature raw unit은 `prd.md`, `adr.md`, `notes.md`를 가진다. 에이전트는
 | 역할 | 책임 |
 | --- | --- |
 | `architect` | PRD 분석, ADR 작성, 구현 계획, 인터페이스 경계 정의 |
-| `domain-engineer` | `src/domain`의 순수 상태/명령/힌트/특성 트리거 구현 |
-| `ui-engineer` | React 화면, command panel, battle log, guess input, 결과 공유 UI 구현 |
+| `domain-engineer` | 앱 핵심 상태, 명령, 규칙, 데이터 계약, 비즈니스 로직 구현 |
+| `ui-engineer` | 사용자-facing 화면, 상호작용, 반응형 UI, 접근성 구현 |
 | `test-engineer` | 도메인/통합/UI 검증 전략과 테스트 구현 |
 | `integrator` | raw/wiki 검증, gate 실행, 커밋 프로토콜 |
 
@@ -90,21 +90,21 @@ developer-only chore로 직접 수정하고 Notes raw unit, wiki ingest, gate, c
 
 domain 작업:
 
-- React 의존 없이 순수 TypeScript로 작성한다.
-- 명령, 이벤트, 상태 패치, 힌트, 로그를 분리한다.
-- 특성은 reducer 내부 조건문이 아니라 trigger/effect 정의로 모델링한다.
+- UI framework 의존을 최소화하고 테스트 가능한 핵심 로직으로 작성한다.
+- 명령, 이벤트, 상태 변경, 외부 효과, 표시용 상태를 분리한다.
+- 확장 규칙은 한 곳의 조건문에 누적하지 않고 명시적인 정책/전략/핸들러로 모델링한다.
 
 UI 작업:
 
-- UI는 domain state를 렌더링한다.
-- command panel, battle log, guess input은 quiz-specific domain logic과 분리한다.
+- UI는 domain/application state를 렌더링한다.
+- 사용자 입력, 상태 표시, 결과 공유 같은 표면은 domain-specific rule 계산과 분리한다.
 - 모바일/데스크톱에서 텍스트와 컨트롤이 겹치지 않아야 한다.
 
 ## Phase 3: 테스트
 
 담당: `test-engineer`
 
-- 도메인 로직은 Vitest 단위 테스트를 우선한다.
+- 핵심 로직은 단위 테스트를 우선한다.
 - UI 변경은 렌더링/상호작용 테스트 또는 명시적 브라우저 검증을 남긴다.
 - 테스트가 아직 없는 영역이면 최소 smoke coverage를 추가하거나, 못 하는 이유를
   notes에 남긴다.
@@ -123,16 +123,16 @@ npm run harness:gate
 ## 실패 모드
 
 - **나쁨:** ADR placeholder를 둔 채 구현한다.
-- **좋음:** data contract, action/turn model, engine boundary 같은 결정을 ADR에 남긴 뒤 구현한다.
+- **좋음:** data contract, state model, engine boundary 같은 결정을 ADR에 남긴 뒤 구현한다.
 
 - **나쁨:** 에이전트가 ADR을 작성한 뒤 곧바로 `accepted`로 바꾼다.
 - **좋음:** ADR은 `proposed`로 남기고, 형님 승인 후 `approval:` 근거와 함께 `accepted`로 바꾼다.
 
-- **나쁨:** UI가 타입 상성이나 특성 판정을 컴포넌트 안에서 직접 계산한다.
-- **좋음:** UI는 domain result를 렌더링하고 판정은 domain에 둔다.
+- **나쁨:** UI가 권한, 가격, 판정, 시뮬레이션 같은 핵심 규칙을 컴포넌트 안에서 직접 계산한다.
+- **좋음:** UI는 domain/application result를 렌더링하고 판정은 핵심 로직에 둔다.
 
-- **나쁨:** 특성 트리거를 reducer 조건문으로 계속 추가한다.
-- **좋음:** AbilityDefinition과 trigger/effect로 확장한다.
+- **나쁨:** 새 규칙을 reducer나 component 조건문으로 계속 추가한다.
+- **좋음:** 명시적인 rule definition, strategy, trigger/effect 같은 확장 지점으로 분리한다.
 
 ## 출력 형식
 

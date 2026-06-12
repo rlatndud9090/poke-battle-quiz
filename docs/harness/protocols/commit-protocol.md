@@ -35,9 +35,9 @@ diff 라벨이 아니라 raw PRD/ADR/notes와 연결되는 결정 기록이다.
 
 기본값은 PRD와 ADR 링크다. 특히 아래 변경은 PRD/ADR 링크가 필수다.
 
-- 사용자 경험, 제품 요구사항, 퀴즈 규칙 변경
+- 사용자 경험, 제품 요구사항, 핵심 규칙 변경
 - domain/data/UI 구조 변경
-- ability trigger, command, hint, daily puzzle 같은 엔진 경계 변경
+- command, state transition, hint, simulation, workflow 같은 엔진 경계 변경
 - 새 dependency, data source, generated data pipeline 결정
 
 아래 변경은 기본적으로 Notes 링크를 사용한다.
@@ -81,8 +81,8 @@ npm run harness:gate
 관련 파일만 명시적으로 stage한다.
 
 ```sh
-git add docs/raw/feature/quiz-data-contract/prd.md
-git add docs/raw/feature/quiz-data-contract/adr.md
+git add docs/raw/feature/data-contract/prd.md
+git add docs/raw/feature/data-contract/adr.md
 git add src/domain/dataTypes.ts
 git add src/domain/dataTypes.test.ts
 ```

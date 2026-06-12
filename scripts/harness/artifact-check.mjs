@@ -186,10 +186,8 @@ function assertApprovalField(fields, relative, label) {
 
 function assertPublicSafeDocs() {
   const forbiddenPatterns = [
-    /pokemon showdown/i,
-    /pokerogue/i,
-    /pokemantle/i,
     /\.omx-config\.json/i,
+    /\.reference-repos/i,
     /session-handoff/i,
     /data-source/i,
   ];

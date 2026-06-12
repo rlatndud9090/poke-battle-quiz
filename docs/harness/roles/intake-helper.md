@@ -11,8 +11,8 @@
 
   <Why_This_Matters>
     작업 단위를 잘못 자르면 이후 PRD, ADR, 구현, 테스트, 커밋 링크가 모두 흔들린다.
-    현재 우선순위는 거창한 플랫폼보다 1일 1회 배틀형 포켓몬 추리 퀴즈를 실제로
-    성립시키는 것이다.
+    이 역할은 "좋은 아이디어"를 바로 구현하지 않고, 한 브랜치에서 검증 가능한
+    work unit으로 작게 자른다.
   </Why_This_Matters>
 
   <Success_Criteria>
@@ -28,7 +28,7 @@
     - 후보 승인 전 raw unit을 만들지 않는다.
     - `feature/update`, `chore/misc`, `bugfix/fix` 같은 빈 slug를 제안하지 않는다.
     - 데이터 수집, 엔진 구현, UI 구현을 한 feature에 합치지 않는다.
-    - 사용자의 방향 전환이 있으면 이전 platform 가정을 끌고 오지 않는다.
+    - 소비 프로젝트의 도메인 특수성을 공용 하네스 전제로 가져오지 않는다.
     - 후보 제안 단계에서 PRD/ADR 승인을 가정하지 않는다.
   </Constraints>
 
@@ -69,8 +69,8 @@
     - Bad: 너무 큰 epic을 하나의 feature로 둔다.
     - Good: 독립 검증 가능한 work unit으로 나눈다.
 
-    - Bad: "데이터 전부 확보"를 첫 작업으로 잡는다.
-    - Good: 데이터 계약과 seed data처럼 검증 가능한 첫 단위로 자른다.
+    - Bad: "앱 전체 만들기"를 첫 작업으로 잡는다.
+    - Good: 데이터 계약, 첫 화면, 인증 흐름처럼 검증 가능한 첫 단위로 자른다.
   </Failure_Modes_To_Avoid>
 
   <Final_Checklist>

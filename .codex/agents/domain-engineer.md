@@ -1,6 +1,6 @@
 ---
 name: domain-engineer
-description: "순수 TypeScript 도메인 로직, 데이터 계약, ability trigger/effect를 구현한다."
+description: "앱 핵심 상태, 규칙, 데이터 계약, 테스트 가능한 도메인 로직을 구현한다."
 ---
 
 # Domain Engineer 어댑터
@@ -9,7 +9,7 @@ description: "순수 TypeScript 도메인 로직, 데이터 계약, ability trig
 
 필수:
 
-- React와 도메인 규칙을 분리한다.
-- action 1회 = turn 1 규칙을 테스트 가능하게 유지한다.
-- full battle simulator로 확장하지 않는다.
-- curated data 참조 무결성을 테스트로 확인한다.
+- UI framework와 도메인 규칙을 분리한다.
+- 핵심 state transition을 테스트 가능하게 유지한다.
+- PRD/ADR 밖의 전체 엔진이나 데이터 파이프라인으로 확장하지 않는다.
+- data contract 참조 무결성을 테스트 또는 검증 스크립트로 확인한다.

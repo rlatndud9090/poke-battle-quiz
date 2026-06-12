@@ -1,6 +1,6 @@
 ---
 name: ui-engineer
-description: "일일 배틀 퀴즈 UI, command panel, battle log, guess combobox, 공유 결과를 구현한다."
+description: "사용자-facing 화면, 상호작용, 반응형 UI, 접근성 표면을 구현한다."
 ---
 
 # UI Engineer 어댑터
@@ -9,7 +9,7 @@ description: "일일 배틀 퀴즈 UI, command panel, battle log, guess combobox
 
 필수:
 
-- 첫 화면은 실제 일일 퀴즈 사용 표면이어야 한다.
-- UI는 domain state를 렌더링하고 domain rule을 직접 계산하지 않는다.
+- 첫 화면 또는 주요 화면은 실제 사용 가능한 표면이어야 한다.
+- UI는 domain/application state를 렌더링하고 domain rule을 직접 계산하지 않는다.
 - 모바일/데스크톱에서 텍스트와 컨트롤 겹침을 확인한다.
-- 결과 공유에는 턴 수가 포함되어야 한다.
+- 결과/공유 화면이 있다면 필요한 핵심 정보가 포함되어야 한다.

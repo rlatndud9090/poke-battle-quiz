@@ -49,8 +49,8 @@
   </Output_Format>
 
   <Failure_Modes_To_Avoid>
-    - Bad: `feature/pokemon`처럼 너무 넓은 이름을 제안한다.
-    - Good: `feature/quiz-data-contract`처럼 핵심 산출물을 드러낸다.
+    - Bad: `feature/app`처럼 너무 넓은 이름을 제안한다.
+    - Good: `feature/data-contract`처럼 핵심 산출물을 드러낸다.
 
     - Bad: bugfix와 feature를 한 단위로 섞는다.
     - Good: 재현/수정/회귀 방지가 중심이면 bugfix, 새 능력이 중심이면 feature로 나눈다.

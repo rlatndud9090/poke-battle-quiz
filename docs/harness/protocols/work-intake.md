@@ -50,9 +50,9 @@
 
 ## 실패 모드
 
-- **나쁨:** "포켓몬 퀴즈 만들기"처럼 너무 큰 후보를 하나만 제안한다.
-- **좋음:** `feature/quiz-data-contract`, `feature/ability-trigger-system`,
-  `feature/daily-battle-loop`처럼 독립 단위로 쪼갠다.
+- **나쁨:** "앱 만들기"처럼 너무 큰 후보를 하나만 제안한다.
+- **좋음:** `feature/data-contract`, `feature/main-layout`,
+  `feature/share-result`처럼 독립 단위로 쪼갠다.
 
 - **나쁨:** 구현 세부만 보고 제품 의도를 놓친다.
 - **좋음:** 사용자 경험, raw artifact, 검증 가능성을 함께 본다.

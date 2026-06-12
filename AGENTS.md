@@ -1,16 +1,19 @@
-# Poke Battle Quiz Agent Guide
+# LLM Project Harness Agent Guide
 
-This file is the project-local operating contract for `/Users/nhn/prvprjt/poke-battle-quiz`.
+This file is the project-local operating contract for this harness checkout.
 It inherits the parent workspace rule: answer in Korean honorifics and call the user `형님`.
 
 ## Project Intent
 
-Build a daily Pokemon deduction quiz where the answer is a Pokemon and the player
-reveals hints through battle-like commands instead of free-form questions.
+Build and maintain a reusable cross-agent harness that can be attached to many
+product repositories: web apps, mobile apps, games, tools, and experiments.
 
-The MVP is not a full battle simulator. It should use a small deterministic quiz
-hint engine: commands emit events, abilities react through explicit hooks, and the
-UI renders battle logs plus revealed hints.
+This repository is not a product app. It owns the shared process layer:
+raw/wiki conventions, PRD/ADR workflow, role prompts, tool adapters, artifact
+checks, integration gates, and commit protocol.
+
+Consumer projects own their product code, product PRDs/ADRs, domain-specific
+roles, UI verification details, and local wiki history.
 
 ## Language Policy
 
@@ -22,12 +25,13 @@ machine-readable form.
 
 ## LLM Wiki Harness
 
-This project uses the Karpathy-style LLM Wiki pattern.
+This repository uses the Karpathy-style LLM Wiki pattern for its own harness
+history, and exports the same pattern for consumer projects.
 
 - Raw sources are the durable source of truth under `docs/raw/`.
 - Raw sources are grouped by branch-derived work units under
   `docs/raw/feature/`, `docs/raw/bugfix/`, and `docs/raw/chore/`.
-- New work branches must use `feature/<kebab-slug>`, `bugfix/<kebab-slug>`, or
+- New work branches should use `feature/<kebab-slug>`, `bugfix/<kebab-slug>`, or
   `chore/<kebab-slug>`. The raw path mirrors the branch:
   `feature/main-layout` -> `docs/raw/feature/main-layout/`.
 - Each raw work unit is a directory, not a loose session dump. Typical feature
@@ -44,13 +48,14 @@ On session start:
 1. Read `docs/wiki/index.md`.
 2. Read `docs/harness/protocols/session-start.md`.
 3. Follow only the raw-unit links relevant to the task.
-4. Read `prd.md` / `adr.md` before making product or architecture decisions.
+4. Read `prd.md` / `adr.md` before making product, architecture, or process
+   decisions.
 5. Read `notes.md` only when implementation history or verification details are
    needed.
 
 When to update the wiki:
 
-- After a product decision, architecture decision, data import decision, or
+- After a product decision, architecture decision, process decision, or
   implementation milestone.
 - After a meaningful debugging discovery or test/verification result.
 - After a discussion that changes project direction.
@@ -68,7 +73,8 @@ Wiki maintenance rules:
   `npm run harness:ingest -- docs/raw/<type>/<slug>` to add or update one index
   line under the best category. Do not add frontmatter, sync logs, rebuild
   scripts, or stale-check machinery.
-- Keep runtime logs, metrics, and OMX state out of `docs/raw/` and `docs/wiki/`.
+- Keep runtime logs, metrics, local reference repos, and OMX state out of
+  `docs/raw/` and `docs/wiki/`.
 
 ## Cross-Agent Harness
 
@@ -90,10 +96,12 @@ work branch it can infer the type and slug. On `main`, pass `--type` and
 Before commit, follow `docs/harness/protocols/commit-protocol.md`. Run
 `npm run harness:gate` unless the change is so small that a clearly justified
 subset is enough. The gate runs artifact checks, lint, build, and tests.
+
 Commit bodies must include a `관련 문서:` block. Use PRD/ADR links for product,
-architecture, implementation, or data changes. Developer-only harness changes
-stay outside the product PRD/ADR automation lane and use raw Notes links unless
-they also change product/domain architecture.
+architecture, implementation, dependency, or durable process changes.
+Developer-only harness maintenance may use raw Notes links unless it changes a
+durable harness policy.
+
 Agents may draft PRDs and ADRs, but must not mark PRDs as `approved` or ADRs as
 `accepted` without explicit user approval. Approved PRDs and accepted ADRs must
 include `approval: "user:YYYY-MM-DD:<reason>"` frontmatter. Legacy approved or
@@ -102,20 +110,19 @@ the artifact-check allowlist permits it.
 
 When the user asks an open-ended next-work question such as "이제 뭐하지?", use
 `$do-next` and follow `docs/harness/protocols/do-next.md`. `work-intake` and
-`prd-drafting` remain compatibility/internal steps, but new work should converge
-through `$do-next` before creating a branch or raw unit.
+`prd-drafting` remain compatibility/internal steps, but new product work should
+converge through `$do-next` before creating a branch or raw unit.
 
 After PRD/ADR approval, implementation is a separate request. Use `$ralplan`
 first for structural, data, engine, dependency, or multi-module changes. Use
 `$ralph` as the default execution lane for approved branch-sized
 implementation, with solo execution reserved for small local edits.
 
-Harness changes are developer operating-structure work, not product planning
-work. Do not route harness maintenance through `$do-next`, product PRD/ADR
-approval, or PRD/ADR-based implementation automation unless the user explicitly
-asks to treat a harness change as a product-facing decision. Track ordinary
-harness changes with a chore raw Notes unit, wiki ingest, `harness:gate`, and
-the commit protocol.
+Harness changes are developer operating-structure work. Do not route ordinary
+harness maintenance through `$do-next`, product PRD/ADR approval, or PRD/ADR
+based implementation automation unless the user explicitly asks to treat a
+harness change as a product-facing decision. Track ordinary harness changes with
+a chore raw Notes unit, wiki ingest, `harness:gate`, and the commit protocol.
 
 ## Raw Unit Templates
 
@@ -125,53 +132,44 @@ the commit protocol.
 - `docs/raw/_templates/bugfix.md`
 - `docs/raw/_templates/chore.md`
 
-## Architecture Direction
-
-Use this high-level shape unless a later wiki decision supersedes it:
+## Repository Shape
 
 ```txt
-src/domain/
-  types.ts
-  state.ts
-  commands.ts
-  battleReducer.ts
-  hints.ts
-  daily.ts
-  rules/
-  abilities/
+docs/harness/
+  protocols/
+  roles/
 
-src/data/
-  curated/
-  generated/
+scripts/harness/
+  raw-start.mjs
+  wiki-ingest.mjs
+  artifact-check.mjs
+  gate.mjs
 
-src/ui/
-  CommandPanel.tsx
-  BattleLog.tsx
-  GuessBox.tsx
-  DailyGame.tsx
+.codex/
+  agents/
+  skills/
+
+.claude/
+  agents/
+  commands/
+  skills/
 ```
 
-Core engine boundary:
+Core boundary:
 
-- React owns rendering and user interaction.
-- `src/domain` owns serializable simulation state and pure reducers.
-- Ability behavior is modeled as trigger effects, not as one-off conditionals in
-  the reducer.
-- Data import/generation belongs outside runtime UI.
+- `docs/harness/` owns shared rules.
+- `.codex/` and `.claude/` are thin adapters over shared rules.
+- `scripts/harness/` owns repeatable checks and small automation.
+- `docs/raw/` and `docs/wiki/` in this repository describe harness evolution,
+  not any consumer product.
 
 ## Verification
 
-After code changes, run the relevant subset of:
+After changes, run the relevant subset of:
 
 ```sh
 npm run harness:check
 npm run lint
 npm run build
 npm run test:run
-```
-
-For local UI checks:
-
-```sh
-npm run dev -- --host 127.0.0.1
 ```

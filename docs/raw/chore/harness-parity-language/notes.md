@@ -25,8 +25,8 @@ unit_type: chore
 
 - 하네스 강도는 `html-editor-fe`처럼 역할별 담당/미담당, 중요성, 성공 기준,
   제약, 실행 절차, 실패 모드, 출력 형식, 체크리스트를 갖는 수준으로 맞춘다.
-- 도메인 특수성은 포켓몬 퀴즈 플랫폼에 맞춘다. 핵심 경계는 quiz platform,
-  deterministic hint engine, ability trigger/effect, React UI shell이다.
+- 도메인 특수성은 소비 프로젝트의 PRD/ADR과 `AGENTS.md`에 둔다. 공용 하네스는
+  work unit, raw/wiki, 승인, 역할 경계, 검증, 커밋 추적성만 담당한다.
 - 프로젝트 작성 문서는 한국어 기본으로 한다. code identifier, branch name,
   command, file path처럼 기계적 식별자는 영어를 허용한다.
 

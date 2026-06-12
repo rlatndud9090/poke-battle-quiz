@@ -53,7 +53,7 @@
 한 줄로 현재 모드를 알려준다.
 
 ```txt
-현재 작업 단위: feature/quiz-data-contract
-raw unit: docs/raw/feature/quiz-data-contract/
+현재 작업 단위: feature/data-contract
+raw unit: docs/raw/feature/data-contract/
 진입: PRD/ADR 기반 feature-develop
 ```

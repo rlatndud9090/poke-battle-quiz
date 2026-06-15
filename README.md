@@ -68,6 +68,25 @@ src/                React 앱 소스
 AGENTS.md           프로젝트 에이전트 가이드
 ```
 
+## 저작권 및 출처
+
+> Pokémon 및 포켓몬 캐릭터 명칭은 Nintendo의 상표입니다.
+> © 1995–2026 Nintendo / Creatures Inc. / GAME FREAK inc.
+
+이 프로젝트는 **비공식 팬 제작(unofficial fan-made) 프로젝트**이며, Nintendo · GAME FREAK ·
+The Pokémon Company와 제휴하거나 후원받지 않습니다. 모든 포켓몬 관련 저작권과 상표는 각
+권리자에게 있습니다.
+
+**데이터 · 참고 출처**
+
+- 포켓몬 종족값 · 타입 · 특성 등 게임 데이터: [PokéAPI](https://pokeapi.co/),
+  [Pokémon Showdown](https://github.com/smogon/pokemon-showdown) 데이터를 참고/가공 (각 라이선스 준수).
+- 배틀 메커니즘 참고: Pokémon Showdown, PokéRogue.
+- 게임 형식 영감: Pokémantle, Wordle, Semantle.
+
+> 정확한 데이터 파이프라인과 출처별 라이선스 표기는 데이터 연동 피처에서 확정해 갱신한다.
+> 프로젝트 코드 자체의 라이선스(예: MIT)는 추후 결정한다.
+
 ## 현재 상태
 
 초기 부트스트랩 단계 — **컨셉 정립 + 하네스 연결**까지 완료. 배틀 엔진 구현, 정답 은닉 아키텍처, 힌트 설계, 포켓몬 데이터 파이프라인은 후속 피처 브랜치에서 진행한다.

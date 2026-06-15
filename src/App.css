@@ -112,6 +112,13 @@
   text-align: center;
 }
 
+.app__legal {
+  margin-top: 16px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text);
+}
+
 .badge {
   display: inline-flex;
   align-items: center;

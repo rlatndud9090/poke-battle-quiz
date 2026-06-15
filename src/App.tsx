@@ -46,6 +46,13 @@ function App() {
 
       <footer className="app__footer">
         <span className="badge">🛠 초기 부트스트랩 — 배틀 엔진 준비 중</span>
+        <p className="app__legal">
+          Pokémon 및 포켓몬 캐릭터 명칭은 Nintendo의 상표입니다. © 1995–2026 Nintendo /
+          Creatures Inc. / GAME FREAK inc.
+          <br />
+          이 사이트는 비공식 팬 제작 프로젝트이며 Nintendo, GAME FREAK, The Pokémon Company와
+          제휴·후원 관계가 없습니다.
+        </p>
       </footer>
     </main>
   )

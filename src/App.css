@@ -1,0 +1,136 @@
+.app {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 48px 24px 64px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  box-sizing: border-box;
+}
+
+.app__header {
+  text-align: center;
+}
+
+.app__eyebrow {
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.app__tagline {
+  margin-top: 12px;
+  color: var(--text);
+}
+
+.app__tagline strong {
+  color: var(--text-h);
+}
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+  background: var(--social-bg);
+}
+
+.card h2 {
+  margin-bottom: 16px;
+}
+
+.card__note {
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.steps {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.steps b {
+  color: var(--text-h);
+}
+
+.log {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.log__row {
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  grid-template-areas:
+    'turn action result'
+    'turn hint hint';
+  gap: 2px 12px;
+  align-items: center;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+}
+
+.log__turn {
+  grid-area: turn;
+  font-family: var(--mono);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.log__action {
+  grid-area: action;
+  color: var(--text-h);
+}
+
+.log__result {
+  grid-area: result;
+  font-family: var(--mono);
+  font-weight: 700;
+  color: var(--text-h);
+}
+
+.log__hint {
+  grid-area: hint;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.app__footer {
+  text-align: center;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-family: var(--mono);
+  color: var(--accent);
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-border);
+  border-radius: 999px;
+  padding: 8px 16px;
+}
+
+@media (max-width: 640px) {
+  .log__row {
+    grid-template-columns: 32px 1fr;
+    grid-template-areas:
+      'turn action'
+      'turn result'
+      'turn hint';
+  }
+}

@@ -1,0 +1,1 @@
+../../.harness/.codex/agents/prd-writer.md

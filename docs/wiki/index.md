@@ -22,6 +22,7 @@ Last updated: 2026-06-15 Asia/Seoul
 > `npm run harness:kickoff -- --type feature --slug <slug> --title "<제목>"` 으로 생성한다.
 
 ### Product & Architecture
+- **포켓몬 데이터 계약(타입 상성표 · 종족→특성 매핑) 정의 및 전 세대 시드** — [PRD](../raw/feature/pokemon-data-contract/prd.md) · [ADR](../raw/feature/pokemon-data-contract/adr.md) · [Notes](../raw/feature/pokemon-data-contract/notes.md)
 
 ### Project Operations
 

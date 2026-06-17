@@ -26,6 +26,9 @@ dist-ssr
 # Harness reference repos — 로컬 전용, 원격에 올리지 않음
 .reference-repos
 
+# 데이터 생성 캐시 (gen-pokemon-data.mjs 청크 캐시) — 로컬 전용, 재개용
+.cache/
+
 # Agent / orchestration state
 .omc/
 .omx/

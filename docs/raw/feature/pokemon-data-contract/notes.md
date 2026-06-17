@@ -33,11 +33,14 @@ Status: draft
   한 방향만 저장하고 배수 변환·복합타입 합산은 순수 함수 한 곳에.
 - **species:** `{ num, en, types[1..2], abilities: {0, 1?, H?} }`. Showdown
   `SpeciesAbility {0,1?,H?,S?}`(0/1=일반, H=숨은, S=이벤트) 슬롯 차용 — S(이벤트)는 제외.
-  슬롯명으로 일반/숨은을 표현하므로 별도 boolean 불필요.
+  슬롯명으로 일반/숨은을 표현하므로 별도 boolean 불필요. (이 스케치는 reference 차용
+  출발점이고, **최종 정답 엔트리는 폼 포함 (species, form) 복합키** — speciesId/isDefault/
+  formCategory 추가. 아래 '폼 정책'·'결정' 섹션이 최종.)
 - **names:** `{ [id|en]: { en, ko } }` 평탄 매핑(pokemantle `name_map` 패턴).
 - 세대는 도감번호(num) 범위에서 파생 가능(Showdown `dex-species.ts` 343–361행 패턴).
-  저장 vs 파생은 결정 포인트(열린 질문).
-- 메가/거대화/지역폼은 `baseSpecies`/`forme`로 필터해 본종 우선(폼 별도 엔트리는 후속).
+  저장 vs 파생 → **ADR 축2-A 명시 저장으로 확정**.
+- 폼: 메가/지역폼/원시회귀는 types/abilities를 원종과 비교해 다르면 **별도 엔트리로 포함**,
+  gmax·외형폼은 자동 제외(상세는 아래 '폼 정책' 섹션).
 
 ### 피할 과한 복잡성
 - pokemantle식 `against_*` 18컬럼 종족별 사전계산(비정규화), 60+ 필드 와이드 테이블,
@@ -54,12 +57,33 @@ Status: draft
   Nintendo / Game Freak / The Pokémon Company. **비공식 팬·비상업** 유지, 출처·라이선스 표기.
   루트 README에 이미 IP 고지/출처 섹션 존재 → 본 피처에서 구체 라이선스 명기.
 
+### 폼(지역폼·메가·원시회귀·거대화) 정책 — PokéAPI 실측
+- species `varieties[]`가 폼을 묶고 각 variety는 별도 `pokemon/{id}`(타입·특성 자체 보유),
+  정확히 1개가 `is_default`(원종). 전체 규모: species 1025 / pokemon 1350 / 비기본 variety 325.
+- **함정:** `pokemon-form` ID 네임스페이스가 `pokemon`과 달라 `pokemon.forms[]` URL을 따라가야 함.
+  폼 포함 판정은 이름 substring 금지(`pikachu-alola-cap`=모자 코스튬 오검출) → **types/abilities를
+  원종과 직접 비교**(둘 중 하나라도 다르면 포함).
+- 지역폼(알로라/가라르/히스이/팔데아 ~57): 샘플 100% 타입·특성 변경 → **포함**.
+- 메가(~96 엔트리, 종 ~48 — charizard/mewtwo는 X/Y): 타입·특성 변경 → **포함**. 원시회귀(2):
+  타입 동일·특성만 변경 → "타입 또는 특성" 규칙으로 **포함**. 거대화 gmax(34): 타입·특성 원종과
+  동일(외형만) → **제외**.
+- deoxys 4폼·피카츄 16코스튬 등: 원종과 동일 → 비교에서 자동 제외. 아르세우스·실버디 타입
+  룰렛(각 ~17): **형님 결정으로 종 자체 블랙리스트(노말 원종 포함 전부 제외)**.
+- 모수: 원종 1025 − 블랙리스트 2 + 지역 57 + 메가 96 + 원시 2 + **기타 intra-gen 타입/특성
+  변경 폼**(로토무 가전 폼·기라티나 오리진·다루마몬드 다루마모드 등) ≈ **~1180–1230**
+  (정확값은 스냅샷 고정·테스트 하드코딩으로 위임).
+- 폼 ko: `form_names` ko가 "알로라의 모습" 수식어뿐이거나 없음, 메가는 "메가리자몽X" 완성형,
+  gmax는 없음 → **base ko + 폼 수식어 합성** 필요.
+- 식별: **(species, form) 복합키**. id/speciesId/isDefault/formCategory(base|mega|primal|regional|other)/nameKo(합성).
+
 ## 결정 (확정)
 
 - 대상: **전 세대 전종(~1025).**
 - 1차 소스: **PokéAPI**(api-data 덤프), ko는 PokéAPI 종속.
 - 생성: **빌드타임 정적 JSON 커밋**(런타임 외부 fetch 아님) → 데일리 결정론·치팅방지·오프라인·
   rate-limit 회피.
+- 폼: 타입/특성이 원종과 다른 폼(지역폼·메가·원시회귀) **포함**, gmax·타입특성 동일 폼·
+  아르세우스·실버디 **제외**. 판정은 types/abilities 원종 비교. 식별 (species, form) 복합키.
 - 위는 후속 모든 피처가 의존하는 durable decision → ADR로 기록(adr.md).
 
 ## 검증
@@ -91,6 +115,9 @@ Status: draft
 - smogon/pokemon-showdown(MIT, typechart damageTaken 인코딩): https://github.com/smogon/pokemon-showdown
 - @pkmn/dex(Showdown 데이터 타입 래퍼, getEffectiveness): https://www.npmjs.com/package/@pkmn/dex
 - Bulbapedia Type(18타입 상성표 권위 출처): https://bulbapedia.bulbagarden.net/wiki/Type
+- pokemon-species/6 varieties(리자몽 폼 묶음): https://pokeapi.co/api/v2/pokemon-species/6/
+- pokemon/10034(charizard-mega-x types/abilities 실측): https://pokeapi.co/api/v2/pokemon/10034/
+- pokemon-form(form_names/is_mega/is_battle_only 플래그): https://pokeapi.co/api/v2/pokemon-form/
 
 ### Reference repos (로컬)
 - Showdown 타입상성표: `pokemon-showdown/data/typechart.ts`

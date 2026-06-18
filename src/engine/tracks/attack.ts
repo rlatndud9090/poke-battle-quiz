@@ -29,7 +29,8 @@ export function interpretAttack(action: Readonly<Action>, secret: Readonly<Secre
   const effects: AttackEffect[] = Array.isArray(record.attack) ? record.attack : [record.attack];
 
   let multiplier: DamageMultiplier = typeMultiplier;
-  const rankClues: Clue[] = [];
+  const absorbRank: Clue[] = []; // C1 흡수랭크업: 흡수 메커니즘이라 x0와 함께 항상 유지.
+  const hitReactionRank: Clue[] = []; // C3 피격반응: 실제 적중(multiplier>0)일 때만 유효.
 
   for (const effect of effects) {
     switch (effect.kind) {
@@ -40,7 +41,7 @@ export function interpretAttack(action: Readonly<Action>, secret: Readonly<Secre
       case "absorbBoost": {
         if (action.attackType === effect.immuneTo) {
           multiplier = 0;
-          rankClues.push({ kind: "rank", target: "secret", stat: effect.stat, delta: effect.delta });
+          absorbRank.push({ kind: "rank", target: "secret", stat: effect.stat, delta: effect.delta });
         }
         break;
       }
@@ -57,7 +58,7 @@ export function interpretAttack(action: Readonly<Action>, secret: Readonly<Secre
       case "hitReaction": {
         if (matchesHitTrigger(effect.trigger, action)) {
           for (const boost of effect.boosts) {
-            rankClues.push({ kind: "rank", target: "secret", stat: boost.stat, delta: boost.delta });
+            hitReactionRank.push({ kind: "rank", target: "secret", stat: boost.stat, delta: boost.delta });
           }
         }
         break;
@@ -65,7 +66,10 @@ export function interpretAttack(action: Readonly<Action>, secret: Readonly<Secre
     }
   }
 
-  return [{ kind: "damage", multiplier }, ...rankClues];
+  // 공격이 면역(multiplier 0)이면 정답은 맞지 않았으므로 C3 피격반응은 거짓 단서 → 억제.
+  // (흡수랭크업 absorbRank는 "흡수했다"는 별개 메커니즘이라 x0와 함께 유지.)
+  const reactions = multiplier > 0 ? hitReactionRank : [];
+  return [{ kind: "damage", multiplier }, ...absorbRank, ...reactions];
 }
 
 function matchesMultiplier(

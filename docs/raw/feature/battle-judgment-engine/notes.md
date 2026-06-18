@@ -569,7 +569,7 @@ export type EntryAbilityEffect =
 // (C) 상태기: 면역(특정/전체) / 반사
 export type StatusAbilityEffect =
   | { kind: 'immune'; blocks: StatusId[] }      // blocks에 포함된 status는 immune
-  | { kind: 'immuneAll' }                       // 모든 v1 StatusId immune (purifying-salt/comatose)
+  | { kind: 'immuneAll' }                       // 비휘발성 주요 상태 immune, 혼란(휘발성) 제외 (purifying-salt/comatose)
   | { kind: 'reflect'; reflects: StatusId[] }   // synchronize: 반사 → marker('status-reflect')
 
 // (D) 랭크기: 차단 / 반전 / 증폭 / 반응 / 반사
@@ -684,8 +684,8 @@ ADR (5): 흡수+랭크업 5종은 `absorbBoost`(x0 + rank), 나머지는 순수 
 | `sweet-veil` | 스위트베일 | C | `immune{blocks:['sleep']}` | 아군조건 무시(정답 자신에 적용) |
 | `immunity` | 면역 | C | `immune{blocks:['poison']}` | 맹독=poison으로 통합(v1 StatusId에 'toxic' 없음) |
 | `pastel-veil` | 파스텔베일 | C | `immune{blocks:['poison']}` | |
-| `purifying-salt` | 정화의소금 | C | `immuneAll` | +C2 고스트0.5x(3-B) 다중 트랙 |
-| `comatose` | 절대안깸 | C | `immuneAll` | 항상 잠듦 취급=모든 상태면역 |
+| `purifying-salt` | 정화의소금 | C | `immuneAll` | 비휘발성만(혼란 제외) +C2 고스트0.5x 다중 트랙 |
+| `comatose` | 절대안깸 | C | `immuneAll` | 비휘발성 주요 상태만(혼란 제외) |
 | `synchronize` | 싱크로 | C | `reflect{reflects:['burn','paralysis','poison']}` | **sleep·confusion 반사 안함**(showdown: slp/frz/기타 제외). → marker('status-reflect') |
 
 > **v1 제외(StatusId 밖, 명시):**
@@ -698,7 +698,7 @@ ADR (5): 흡수+랭크업 5종은 `absorbBoost`(x0 + rank), 나머지는 순수 
 > - `shields-down`(리밋실드): 폼(HP) 조건부 면역 → **v1 제외**(폼 상태 맥락 없음).
 > - `corrosion`(부식) 등 "면역 무시" 공격측 특성은 C5 → 대상 아님.
 >
-> **혼란(confusion) 관측원 확인:** v1 StatusId의 confusion을 막는 화이트리스트는 `own-tempo` 단 1종(보강2 표 기준). comatose/purifying-salt(`immuneAll`)도 혼란 면역에 포함. 충분.
+> **혼란(confusion) 관측원 확인(Codex #3 정정):** v1 confusion을 막는 화이트리스트는 `own-tempo` **단 1종**이다. `immuneAll`(정화의소금·절대안깸)은 **비휘발성(주요) 상태만** 막고 **혼란(휘발성)은 못 막는다** → 혼란 행동엔 정상 적용. (showdown: purifyingsalt/comatose는 `onSetStatus`만, `onTryAddVolatile`(혼란) 없음.)
 
 #### 3-F. 랭크기 트랙 — 보강3 랭크반응 (14종)
 
@@ -816,7 +816,7 @@ export function entryClues(secret): readonly Clue[] {
 ```
 
 **책임 분담:**
-- `interpretAttack`: ① getEffectiveness(타입배율) ② 화이트리스트 조회(secret.ability.slug) ③ C1면역(immuneType/absorbBoost→multiplier 0 [+rank]) ④ C2 multiplier(factor 곱) ⑤ predicate(predicates.ts 호출, 곱/0) ⑥ C3피격랭크(충돌 해소 시) → `damage` + 선택 `rank`. 화이트리스트 밖이면 순수 타입배율만(안전 폴백).
+- `interpretAttack`: ① getEffectiveness(타입배율) ② 화이트리스트 조회(secret.ability.slug) ③ C1면역(immuneType/absorbBoost→multiplier 0 [+rank]) ④ C2 multiplier(factor 곱) ⑤ predicate(predicates.ts 호출, 곱/0) ⑥ C3피격랭크 → `damage` + 선택 `rank`. 화이트리스트 밖이면 순수 타입배율만(안전 폴백). **C3 피격랭크는 최종 multiplier>0(실제 적중)일 때만 방출**(면역 x0이면 억제=거짓 단서 차단, Codex #3). 단 absorbBoost의 x0+rank는 흡수 메커니즘이라 유지.
 - `interpretEntry`: 화이트리스트 entry 슬롯 → `entry`(setWeather/setTerrain) / `rank{target:'secret'}`(selfBoost) / `marker('intimidate')`. 없으면 `[]`.
 - `interpretStatus`: action.status가 immune blocks/immuneAll → `status{result:'immune'}`; reflect 대상 → `marker('status-reflect')`; 화이트리스트 밖/미해당 → `status{result:'applied'}`(폴백).
 - `interpretStat`: 적용순서 **차단(block/blockAndReact)→반전(invert)/증폭(amplify)→반응(react/blockAndReact)→반사(reflect→marker)**. 화이트리스트 밖 → `rank{delta:입력 stages}`(정상 적용 폴백).

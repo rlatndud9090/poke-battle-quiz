@@ -22,7 +22,10 @@ export function interpretStatus(action: Readonly<Action>, secret: Readonly<Secre
         ? [{ kind: "status", status: action.status, result: "immune" }]
         : [applied];
     case "immuneAll":
-      return [{ kind: "status", status: action.status, result: "immune" }];
+      // 정화의소금·절대안깸은 비휘발성(주요) 상태만 막는다. 혼란(휘발성)은 막지 못함 → 정상 적용.
+      return action.status === "confusion"
+        ? [applied]
+        : [{ kind: "status", status: action.status, result: "immune" }];
     case "reflect":
       return effect.reflects.includes(action.status) ? [{ kind: "marker", marker: "status-reflect" }] : [applied];
     default:

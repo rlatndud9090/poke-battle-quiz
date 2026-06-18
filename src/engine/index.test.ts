@@ -506,3 +506,52 @@ describe("보강 · 의존 방향 · 외부 의존 0 (정적 소스 검사)", ()
     }
   });
 });
+
+describe("Codex 리뷰 회귀 (#3)", () => {
+  // P1: 공격이 면역(x0)이면 정답은 맞지 않았으므로 C3 피격반응은 거짓 단서 → 억제.
+  //     단 흡수랭크업(absorbBoost)은 "흡수했다"는 별개 메커니즘이라 x0와 함께 유지.
+  describe("P1 · 면역 공격 시 C3 피격반응 억제", () => {
+    it("stamina 정답(땅)에 전기 공격(타입면역) → damage 0, 랭크 단서 없음", () => {
+      const clues = judge(attack("electric"), makeSecret(["ground"], "stamina"));
+      expect(damageOf(clues).multiplier).toBe(0);
+      expect(ranks(clues)).toHaveLength(0);
+    });
+    it("rattled 정답(노말)에 고스트 공격(타입면역) → damage 0, 랭크 단서 없음", () => {
+      const clues = judge(attack("ghost", "special"), makeSecret(["normal"], "rattled"));
+      expect(damageOf(clues).multiplier).toBe(0);
+      expect(ranks(clues)).toHaveLength(0);
+    });
+    it("weak-armor 정답(비행)에 땅 물리(타입면역) → damage 0, 랭크 단서 없음", () => {
+      const clues = judge(attack("ground", "physical"), makeSecret(["flying"], "weak-armor"));
+      expect(damageOf(clues).multiplier).toBe(0);
+      expect(ranks(clues)).toHaveLength(0);
+    });
+    it("대조: weak-armor 정답(바위)에 땅 물리(적중 ×2) → def-1·spe+2 정상 방출", () => {
+      const clues = judge(attack("ground", "physical"), makeSecret(["rock"], "weak-armor"));
+      expect(damageOf(clues).multiplier).toBeCloseTo(2);
+      expect(rankFor(clues, "def")?.delta).toBe(-1);
+      expect(rankFor(clues, "spe")?.delta).toBe(2);
+    });
+    it("대조: 흡수랭크업(lightning-rod)은 x0에서도 rank 유지 (억제 대상 아님)", () => {
+      const clues = judge(attack("electric"), makeSecret(["normal"], "lightning-rod"));
+      expect(damageOf(clues).multiplier).toBe(0);
+      expect(rankFor(clues, "spa")?.delta).toBe(1);
+    });
+  });
+
+  // P2: immuneAll(정화의소금·절대안깸)은 비휘발성(주요) 상태만 막고 혼란(휘발성)은 못 막는다.
+  describe("P2 · immuneAll은 혼란을 막지 못함", () => {
+    it("혼란 → purifying-salt = 정상 적용(immune 아님)", () => {
+      expect(statusOf(judge(status("confusion"), makeSecret(["rock"], "purifying-salt")))?.result).toBe("applied");
+    });
+    it("혼란 → comatose = 정상 적용", () => {
+      expect(statusOf(judge(status("confusion"), makeSecret(["normal"], "comatose")))?.result).toBe("applied");
+    });
+    it("대조: 주요 상태(화상) → purifying-salt = 여전히 immune", () => {
+      expect(statusOf(judge(status("burn"), makeSecret(["rock"], "purifying-salt")))?.result).toBe("immune");
+    });
+    it("대조: 혼란 전용 면역(own-tempo)은 혼란을 막음", () => {
+      expect(statusOf(judge(status("confusion"), makeSecret(["normal"], "own-tempo")))?.result).toBe("immune");
+    });
+  });
+});

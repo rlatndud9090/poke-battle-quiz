@@ -40,8 +40,30 @@ const GEN_MAP = {
 const REGION_KO = { alola: "알로라", galar: "가라르", hisui: "히스이", paldea: "팔데아" };
 const REGION_EN = { alola: "Alolan", galar: "Galarian", hisui: "Hisuian", paldea: "Paldean" };
 
+// 서브폼 슬러그 → 표시용 서술자.
+// 이 스냅샷의 PokéAPI는 일부 폼(켄타로스 팔데아 3종, enamorus-therian, oinkologne-female 등)에
+// form 파일/ko form_names가 없어, 슬러그에서만 폼을 식별할 수 있다. form_names가 있으면 그쪽을 우선한다.
+const SUBFORM_KO = {
+  "combat-breed": "컴뱃종", "blaze-breed": "블레이즈종", "aqua-breed": "아쿠아종", // 켄타로스 팔데아
+  therian: "영물폼", // enamorus (tornadus/thundurus/landorus는 form_names 보유)
+  female: "암컷", // oinkologne (meowstic/indeedee는 form_names 보유)
+  "white-striped": "백색근의 모습", // basculin (적색근=원종/청색근=form_names 보유)
+  "battle-bond": "유대변화", "own-tempo": "마이페이스", // greninja / rockruff (특성형)
+  roaming: "도보폼", // gimmighoul (상자=원종)
+  terastal: "테라스탈폼", stellar: "스텔라폼", // terapagos
+  "yellow-plumage": "노랑 깃털", "white-plumage": "하양 깃털", // squawkabilly (초록=원종)
+};
+const SUBFORM_EN = {
+  "combat-breed": "Combat", "blaze-breed": "Blaze", "aqua-breed": "Aqua", zen: "Zen",
+  therian: "Therian", female: "Female", "white-striped": "White-Striped",
+  "battle-bond": "Battle Bond", "own-tempo": "Own Tempo", roaming: "Roaming",
+  terastal: "Terastal", stellar: "Stellar",
+  "yellow-plumage": "Yellow Plumage", "white-plumage": "White Plumage",
+};
+
 const root = path.resolve(fileURLToPath(import.meta.url), "../..");
-const CACHE_DIR = path.join(root, ".cache", "pokedata");
+// 스냅샷 SHA로 캐시를 네임스페이스 → SHA 갱신 시 옛 캐시를 재사용해 stale 데이터가 섞이는 사고 방지.
+const CACHE_DIR = path.join(root, ".cache", "pokedata", SHA);
 const OUT_DIR = path.join(root, "src", "data");
 const FRESH = process.argv.includes("--fresh");
 
@@ -99,30 +121,75 @@ function classifyForm(name, formMeta) {
   return "other";
 }
 
-function buildNames(variety, isBase, baseKo, baseEn, formMeta, category) {
+// 슬러그에서 원종명·리전 토큰을 떼어낸 서브폼 잔여부 (예: "tauros-paldea-combat-breed" → "combat-breed").
+function slugRemainder(fullSlug, speciesName, region) {
+  let rest = fullSlug.startsWith(`${speciesName}-`) ? fullSlug.slice(speciesName.length + 1) : fullSlug;
+  if (region) rest = rest.replace(new RegExp(`(?:^|-)${region}(?:-|$)`), "-").replace(/^-+|-+$/g, "");
+  return rest;
+}
+
+// ko form_names가 리전만 가리키는 마커("가라르의 모습")인지 — 서브폼 정보가 없다는 뜻.
+function isRegionMarkerKo(formKo, region) {
+  if (!formKo || !region) return false;
+  return formKo.replace(/의?\s*모습$/, "").trim() === REGION_KO[region];
+}
+
+// 이름 규칙: 폼은 "원종(리전/서브폼)" 괄호 형식, 리전 먼저.
+//  - 켄타로스(팔데아/컴뱃종), 나인테일(알로라), 춤추새(파칙파칙스타일)
+//  - 메가/원시/로토무 가전·울트라네크로즈마처럼 form_names가 원종명을 품은 "완성형"은 그대로 둔다.
+//  - 영어는 리전을 접두로 두고 서브폼만 괄호로(Galarian Darmanitan (Zen)) — 영어 관용 유지.
+function buildNames(variety, isBase, baseKo, baseEn, formMeta, category, speciesName) {
   if (isBase) {
     return { ko: baseKo || baseEn, en: baseEn, koFallback: !baseKo };
   }
   const formKo = formMeta ? nameByLang(formMeta.form_names, "ko") : null;
   const formEn = formMeta ? nameByLang(formMeta.form_names, "en") : null;
   const region = Object.keys(REGION_KO).find((r) => variety.name.includes(`-${r}`));
+  const rest = slugRemainder(variety.name, speciesName, region);
 
-  // 한국어: 지역폼은 "알로라 식스테일"식 접두, 메가/원시는 form_names 완성형("메가리자몽X") 우선
-  let ko;
-  if (region && baseKo) ko = `${REGION_KO[region]} ${baseKo}`;
-  else if (formKo && baseKo && formKo.includes(baseKo)) ko = formKo;
-  else if (category === "mega" && baseKo) ko = `메가 ${baseKo}`;
-  else if (category === "primal" && baseKo) ko = `원시 ${baseKo}`;
-  else if (formKo && baseKo) ko = `${baseKo} (${formKo})`;
-  else ko = baseKo || capitalize(variety.name);
+  // 1) 완성형 단독 이름: form_names ko가 원종명을 포함(메가리자몽X·히트로토무·울트라네크로즈마…)
+  if (formKo && baseKo && formKo.includes(baseKo)) {
+    const en = formEn && baseEn && formEn.includes(baseEn)
+      ? formEn
+      : category === "mega" && baseEn ? `Mega ${baseEn}`
+      : category === "primal" && baseEn ? `Primal ${baseEn}`
+      : baseEn || capitalize(variety.name);
+    return { ko: formKo, en, koFallback: !baseKo };
+  }
+  if (category === "mega") {
+    // X/Y 메가(라이츄 등 Z-A 신규)는 ko form_names가 없어 슬러그에서 접미를 살린다.
+    const xy = variety.name.endsWith("-mega-x") ? " X" : variety.name.endsWith("-mega-y") ? " Y" : "";
+    return { ko: baseKo ? `메가 ${baseKo}${xy}` : capitalize(variety.name), en: baseEn ? `Mega ${baseEn}${xy}` : capitalize(variety.name), koFallback: !baseKo };
+  }
+  if (category === "primal") {
+    return { ko: baseKo ? `원시 ${baseKo}` : capitalize(variety.name), en: baseEn ? `Primal ${baseEn}` : capitalize(variety.name), koFallback: !baseKo };
+  }
 
-  // 영어: 동일 규칙 (form_names en이 "Alolan Form" 같은 수식어만일 때 base와 합성)
-  let en;
-  if (region && baseEn) en = `${REGION_EN[region]} ${baseEn}`;
-  else if (formEn && baseEn && formEn.includes(baseEn)) en = formEn;
-  else if (category === "mega" && baseEn) en = `Mega ${baseEn}`;
-  else if (category === "primal" && baseEn) en = `Primal ${baseEn}`;
-  else en = baseEn || capitalize(variety.name);
+  // 2) "원종(리전/서브폼)" 괄호 형식
+  // 한국어 서브폼: 리전 마커가 아닌 form_names ko 우선, 없으면 슬러그 매핑(켄타로스 팔데아 3종)
+  let subKo = null;
+  if (formKo && !isRegionMarkerKo(formKo, region) && !(baseKo && formKo.includes(baseKo))) subKo = formKo;
+  else if (SUBFORM_KO[rest]) subKo = SUBFORM_KO[rest];
+
+  const koParts = [];
+  if (region) koParts.push(REGION_KO[region]);
+  if (subKo) koParts.push(subKo);
+  const ko = baseKo
+    ? (koParts.length ? `${baseKo}(${koParts.join("/")})` : baseKo)
+    : capitalize(variety.name);
+
+  // 영어 서브폼: 리전이 있으면 슬러그 매핑(형식 불안정한 form_names en 회피),
+  // 없으면 form_names en 우선, 그것도 없으면 슬러그 매핑 폴백.
+  let subEn = null;
+  if (region) {
+    if (rest && rest !== "standard") subEn = SUBFORM_EN[rest] ?? null;
+  } else if (formEn && !(baseEn && formEn.includes(baseEn))) {
+    subEn = formEn;
+  } else if (rest && rest !== "standard") {
+    subEn = SUBFORM_EN[rest] ?? null;
+  }
+  const enBase = region && baseEn ? `${REGION_EN[region]} ${baseEn}` : (baseEn || capitalize(variety.name));
+  const en = subEn ? `${enBase} (${subEn})` : enBase;
 
   return { ko, en, koFallback: !baseKo };
 }
@@ -141,6 +208,8 @@ async function processSpecies(id) {
 
   const varieties = [];
   for (const v of sp.varieties ?? []) {
+    // gmax(거다이맥스)·totem(나라모습)은 외형/크기만 다른 비전투 변종 — 리전 totem은 리전폼과 중복되므로 제외.
+    if (v.pokemon.name.includes("-gmax") || v.pokemon.name.includes("-totem")) continue;
     const pk = await fetchJson(v.pokemon.url);
     if (!pk) continue;
     const types = pk.types.map((t) => t.type.name).filter((t) => BATTLE_TYPES.has(t));
@@ -179,7 +248,7 @@ async function processSpecies(id) {
     let formMeta = null;
     if (!v.isDefault && v.formUrl) formMeta = await fetchJson(v.formUrl);
     const category = v.isDefault ? "base" : classifyForm(v.name, formMeta);
-    const { ko, en, koFallback } = buildNames(v, v.isDefault, baseKo, baseEn, formMeta, category);
+    const { ko, en, koFallback } = buildNames(v, v.isDefault, baseKo, baseEn, formMeta, category, speciesName);
     if (koFallback) koFallbacks.push(v.name);
     candidates.push({
       id: v.name,
@@ -251,6 +320,17 @@ function validateAll(candidates, chart) {
   }
   for (const c of candidates) {
     if (BLACKLIST.has(c.speciesName)) throw new Error(`블랙리스트 누수: ${c.id}`);
+  }
+  // 표시 이름 유일성: 타입이 다른 폼이 같은 이름으로 뭉개지면 추론 신호가 사라진다.
+  const dupKo = new Map();
+  const seenKo = new Map();
+  for (const c of candidates) {
+    if (seenKo.has(c.nameKo)) dupKo.set(c.nameKo, [...(dupKo.get(c.nameKo) ?? [seenKo.get(c.nameKo)]), c.id]);
+    else seenKo.set(c.nameKo, c.id);
+  }
+  if (dupKo.size > 0) {
+    const lines = [...dupKo.entries()].map(([n, ids]) => `  "${n}" ← ${ids.join(", ")}`).join("\n");
+    throw new Error(`중복 nameKo ${dupKo.size}건 (폼 식별 불가):\n${lines}`);
   }
 }
 

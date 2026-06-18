@@ -3,7 +3,7 @@
 > 이 문서는 항상 로딩되는 유일한 LLM Wiki 페이지다. 프로젝트 방향과 raw work
 > unit 링크만 제공한다. 종합 요약 문서로 키우지 않는다.
 
-Last updated: 2026-06-15 Asia/Seoul
+Last updated: 2026-06-18 Asia/Seoul
 
 ## Direction
 
@@ -23,6 +23,7 @@ Last updated: 2026-06-15 Asia/Seoul
 
 ### Product & Architecture
 - **포켓몬 데이터 계약(타입 상성표 · 종족→특성 매핑) 정의 및 전 세대 시드** — [PRD](../raw/feature/pokemon-data-contract/prd.md) · [ADR](../raw/feature/pokemon-data-contract/adr.md) · [Notes](../raw/feature/pokemon-data-contract/notes.md)
+- **포켓몬 데이터 폼 누수·이름 충돌·캐시 키 수정(PR #1 리뷰 반영)** — [Bugfix](../raw/bugfix/pokemon-data-form-fixes/bugfix.md)
 
 ### Project Operations
 

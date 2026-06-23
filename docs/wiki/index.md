@@ -25,6 +25,7 @@ Last updated: 2026-06-18 Asia/Seoul
 - **포켓몬 데이터 계약(타입 상성표 · 종족→특성 매핑) 정의 및 전 세대 시드** — [PRD](../raw/feature/pokemon-data-contract/prd.md) · [ADR](../raw/feature/pokemon-data-contract/adr.md) · [Notes](../raw/feature/pokemon-data-contract/notes.md)
 - **포켓몬 데이터 폼 누수·이름 충돌·캐시 키 수정(PR #1 리뷰 반영)** — [Bugfix](../raw/bugfix/pokemon-data-form-fixes/bugfix.md)
 - **배틀 판정 엔진** — [PRD](../raw/feature/battle-judgment-engine/prd.md) · [ADR](../raw/feature/battle-judgment-engine/adr.md) · [Notes](../raw/feature/battle-judgment-engine/notes.md)
+- **추측/피드백 계약 및 정답 은닉 아키텍처** — [PRD](../raw/feature/guess-feedback-contract/prd.md) · [ADR](../raw/feature/guess-feedback-contract/adr.md) · [Notes](../raw/feature/guess-feedback-contract/notes.md)
 
 ### Project Operations
 

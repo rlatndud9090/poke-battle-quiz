@@ -29,6 +29,7 @@ Status: draft
 - (추측 예산·턴 모델은 형님 확정 완료 — 위 「결정」 참조.)
 - 미래 은닉 승급 시: provider를 Cloudflare Pages+Functions+Workers KV 어댑터로 교체(레퍼런스 조사 권장).
 - **전단사 무중복 범위(구현 후 명기, 2026-06-19)**: 데일리 전단사는 **사이클 정렬 N일 윈도**(N=후보수≈1209 → 약 3.3년) 한정이다. 임의 연속 N일이 사이클 경계를 가로지르면 독립 순열 둘이 만나 근접 재등장이 가능하나, 경계는 ≈3.3년마다라 실질 무해(ADR이 트레이드오프로 인지). 테스트는 사이클 정렬 윈도에서 distinct===N으로 검증. 임의-윈도 무중복까지 원하면 사이클 간 순열 합성(글로벌 인덱싱)으로 후속 강화 가능.
+- **reveal-on-reload seam 추적(Codex PR #4 리뷰, 2026-06-24)**: `bootstrapGame`의 `reviveRevealed`가 해결 세션 복원 시 `revealed`를 로컬 `dailyAnswer(gameDate)`로 재유도해 **주입된 provider를 우회**한다(`index.ts`). v1은 로컬 provider 1종뿐이라 관측 불일치 없음. 단, divergent provider(서버/목)를 `bootstrapGame(options.createProvider)`로 주입하면 복원 `revealed`가 그 provider 정답과 어긋날 수 있다 → 위 「미래 은닉 승급」 어댑터 도입 시 **reveal 경로를 provider 경계 뒤로** 옮긴다(`AnswerProvider`에 reveal seam 추가; 정답 영속 저장은 비노출 불변식상 금지). v1 코드는 무변경(형님 결정: 옵션 1, 새 ADR 비작성·accepted ADR 본문 불변).
 
 ## 레퍼런스 조사
 

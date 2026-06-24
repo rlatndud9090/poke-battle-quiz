@@ -37,7 +37,14 @@ function isValidPersisted(value: unknown): value is PersistedSession {
  * load 시 version 불일치/미래값·파싱 실패는 폐기(null 반환)해 새 세션을 시작하게 한다.
  */
 export function createLocalStoragePersistence(): PersistenceAdapter {
-  const store: Storage | null = typeof localStorage !== "undefined" ? localStorage : null;
+  // localStorage 식 평가 자체가 throw할 수 있다(샌드박스 iframe·스토리지 차단 origin·무효 origin).
+  // getItem/setItem의 try/catch는 이미 늦으므로, 취득부도 감싸 "접근 차단 = 안전 no-op" 계약을 취득 시점에 보장한다.
+  let store: Storage | null;
+  try {
+    store = typeof localStorage !== "undefined" ? localStorage : null;
+  } catch {
+    store = null;
+  }
 
   return {
     load(gameDate: GameDate): PersistedSession | null {

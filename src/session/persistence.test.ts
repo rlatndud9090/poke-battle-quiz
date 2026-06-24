@@ -5,9 +5,9 @@
 
 import { describe, expect, it } from "vitest";
 import type { Clue } from "../engine";
-import { createMemoryPersistence } from "./persistence";
+import { createLocalStoragePersistence, createMemoryPersistence } from "./persistence";
 import { applyAction, fromPersisted, initSession, toPersisted } from "./session";
-import type { ActionResult, PersistedSession } from "./types";
+import type { ActionResult, PersistedSession, PersistenceAdapter } from "./types";
 
 const DAMAGE_CLUE: Clue = { kind: "damage", multiplier: 2 };
 const STATUS_CLUE: Clue = { kind: "status", status: "burn", result: "applied" };
@@ -93,5 +93,32 @@ describe("createMemoryPersistence — version 폐기 정책", () => {
     const persistence = createMemoryPersistence();
     persistence.save({ version: 1, gameDate: "2026-06-23", clueLog: [], moveCount: 0, status: "진행" });
     expect(persistence.load("2026-06-23")).not.toBeNull();
+  });
+});
+
+describe("createLocalStoragePersistence — 취득 가드(접근 차단 환경)", () => {
+  it("localStorage 접근 자체가 throw해도 팩토리가 안전 no-op으로 폴백한다", () => {
+    // 샌드박스 iframe·스토리지 차단 origin: localStorage 식 평가가 SecurityError를 던진다.
+    const original = Object.getOwnPropertyDescriptor(globalThis, "localStorage");
+    Object.defineProperty(globalThis, "localStorage", {
+      configurable: true,
+      get() {
+        throw new Error("SecurityError: localStorage is not available");
+      },
+    });
+    try {
+      let persistence: PersistenceAdapter | undefined;
+      // 취득부 가드 전: 팩토리 호출 자체가 터졌다(회귀). 가드 후: no-op 어댑터로 폴백.
+      expect(() => {
+        persistence = createLocalStoragePersistence();
+      }).not.toThrow();
+      expect(persistence?.load("2026-06-23")).toBeNull();
+      expect(() =>
+        persistence?.save({ version: 1, gameDate: "2026-06-23", clueLog: [], moveCount: 0, status: "진행" }),
+      ).not.toThrow();
+    } finally {
+      if (original) Object.defineProperty(globalThis, "localStorage", original);
+      else delete (globalThis as Record<string, unknown>).localStorage;
+    }
   });
 });

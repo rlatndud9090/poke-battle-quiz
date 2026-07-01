@@ -2,7 +2,7 @@
 title: "하네스 서브모듈 최신화"
 date: "2026-07-01"
 status: done # draft | done | rejected
-approval: "user:2026-07-01:하네스 서브모듈 최신화 후 main 푸시 및 작업 브랜치 리베이스 요청"
+approval: "user:2026-07-01:하네스 서브모듈 최신화 커밋해서 바로 main에 푸쉬"
 unit_type: chore
 ---
 
@@ -18,7 +18,7 @@ unit_type: chore
 ## 범위
 
 - 포함
-  - `.harness` submodule pointer를 `e99a24e`에서 `80da6ef`로 업데이트
+  - `.harness` submodule pointer를 `80da6ef`에서 `18203c2`로 업데이트
   - `attach-submodule.mjs` 재실행으로 adapter surface 정합성 재확인
   - `npm run harness:gate`로 하네스/린트/빌드/테스트 검증
 - 제외
@@ -27,7 +27,7 @@ unit_type: chore
 
 ## 결정
 
-- 하네스 최신 커밋 `80da6ef`를 소비 프로젝트의 새 pin으로 채택한다.
+- 하네스 최신 커밋 `18203c2`를 소비 프로젝트의 새 pin으로 채택한다.
 - attach 재실행 결과, 프로젝트 override나 adapter 링크 추가 변경은 없었고 기존 구조를 그대로 유지했다.
 
 ## 검증
@@ -35,6 +35,5 @@ unit_type: chore
 - `git submodule update --remote .harness`
 - `node .harness/scripts/harness/attach-submodule.mjs --harness-dir .harness`
 - `npm run harness:gate`
-- submodule diff: `e99a24e..80da6ef`
-  - `Add ClaudeCode FleetView title and result conventions to stage skills`
-  - `Prefer runtime structured question tools before plain-text fallback`
+- submodule diff: `80da6ef..18203c2`
+  - `Restore deep-interview as the first interview path in harness flows`

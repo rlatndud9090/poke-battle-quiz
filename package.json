@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "gen:data": "node scripts/gen-pokemon-data.mjs",
+    "gen:panel-metadata": "node scripts/gen-panel-metadata.mjs",
     "test": "vitest",
     "test:run": "vitest run --passWithNoTests",
     "harness:kickoff": "node .harness/scripts/harness/kickoff.mjs",

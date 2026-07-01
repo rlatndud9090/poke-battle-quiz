@@ -65,3 +65,12 @@ export function savePanelSession(session: PersistedPanelGame) {
   }
   memoryStore.set(getKey(session.gameDate), value);
 }
+
+export function resetPanelSession(gameDate: string) {
+  const storage = getStorage();
+  if (storage) {
+    storage.removeItem(getKey(gameDate));
+    return;
+  }
+  memoryStore.delete(getKey(gameDate));
+}

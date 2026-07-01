@@ -1,6 +1,7 @@
 import { useDeferredValue, useState } from "react";
 import type { FormEvent } from "react";
 import "./App.css";
+import PanelCard from "./components/PanelCard";
 import { POKEMON_TYPES } from "./data";
 import {
   createPanelGameRuntime,
@@ -10,6 +11,7 @@ import {
   getPanelMetadata,
   getTypePanelMultiplier,
   openPanel,
+  resetPanelSession,
   savePanelSession,
   searchEligibleCandidates,
   submitGuess,
@@ -51,6 +53,8 @@ const STATIC_PANELS: Array<{ id: PanelId; label: string; hint: string }> = [
   { id: "title-sv", label: "SV", hint: "스칼렛·바이올렛" },
   { id: "title-za", label: "ZA", hint: "레전드 Z-A" },
 ];
+
+const IS_DEV = import.meta.env.DEV;
 
 function createAppState() {
   return createPanelGameRuntime();
@@ -140,6 +144,14 @@ function App() {
     setSelectedCandidateId(null);
   }
 
+  function handleResetSession() {
+    resetPanelSession(view.gameDate);
+    const runtime = createAppState();
+    setSession(runtime.session);
+    setQuery("");
+    setSelectedCandidateId(null);
+  }
+
   return (
     <main className="app">
       <header className="hero">
@@ -160,6 +172,13 @@ function App() {
 
       {persistenceMode === "memory" ? (
         <p className="notice">브라우저 저장소에 접근할 수 없어 이 탭 안에서만 진행 상태를 유지합니다.</p>
+      ) : null}
+      {IS_DEV ? (
+        <div className="dev-toolbar">
+          <button className="dev-toolbar__button" type="button" onClick={handleResetSession}>
+            Dev: 오늘 세션 리셋
+          </button>
+        </div>
       ) : null}
 
       <section className="workspace">
@@ -183,7 +202,7 @@ function App() {
                 label={TYPE_LABELS[type]}
                 hint="방어 상성"
                 value={getPanelValue(answer, type)}
-                onClick={() => handleOpenPanel(type)}
+                onOpen={() => handleOpenPanel(type)}
               />
             ))}
             {STATIC_PANELS.map((panel) => (
@@ -194,7 +213,7 @@ function App() {
                 label={panel.label}
                 hint={panel.hint}
                 value={getPanelValue(answer, panel.id)}
-                onClick={() => handleOpenPanel(panel.id)}
+                onOpen={() => handleOpenPanel(panel.id)}
               />
             ))}
           </div>
@@ -304,30 +323,6 @@ function App() {
         </p>
       </footer>
     </main>
-  );
-}
-
-function PanelCard(props: {
-  label: string;
-  hint: string;
-  value: string;
-  isOpen: boolean;
-  disabled: boolean;
-  onClick: () => void;
-}) {
-  const { label, hint, value, isOpen, disabled, onClick } = props;
-
-  return (
-    <button className={isOpen ? "panel-card panel-card--open" : "panel-card"} type="button" onClick={onClick} disabled={disabled}>
-      <span className="panel-card__face panel-card__face--front">
-        <strong>{label}</strong>
-        <small>{hint}</small>
-      </span>
-      <span className="panel-card__face panel-card__face--back">
-        <strong>{value}</strong>
-        <small>{label}</small>
-      </span>
-    </button>
   );
 }
 

@@ -69,6 +69,21 @@
   color: var(--muted);
 }
 
+.dev-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+.dev-toolbar__button {
+  min-height: 40px;
+  border-radius: 999px;
+  border: 1px dashed var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+  padding: 8px 14px;
+}
+
 .workspace {
   display: grid;
   grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.85fr);
@@ -123,36 +138,39 @@
 }
 
 .panel-card {
-  position: relative;
   min-height: 106px;
-  border: 0;
-  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: linear-gradient(160deg, var(--panel-top), var(--panel-bottom));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
   cursor: pointer;
-  perspective: 1000px;
-  padding: 0;
+  padding: 14px;
+  text-align: left;
+  transition:
+    transform 220ms ease,
+    background 220ms ease,
+    border-color 220ms ease;
 }
 
 .panel-card:disabled {
   cursor: default;
 }
 
+.panel-card--flipping {
+  transform: rotateY(90deg);
+}
+
+.panel-card--open {
+  background: linear-gradient(160deg, var(--panel-open-top), var(--panel-open-bottom));
+  border-color: rgba(155, 80, 38, 0.25);
+}
+
 .panel-card__face {
-  position: absolute;
-  inset: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: 10px;
-  padding: 14px;
-  border-radius: 18px;
-  border: 1px solid var(--border);
-  background: linear-gradient(160deg, var(--panel-top), var(--panel-bottom));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
-  transition:
-    transform 320ms ease,
-    opacity 320ms ease;
-  backface-visibility: hidden;
-  text-align: left;
+  min-height: 76px;
 }
 
 .panel-card__face strong {
@@ -164,19 +182,6 @@
   color: var(--muted);
   font-size: 12px;
   line-height: 1.35;
-}
-
-.panel-card__face--back {
-  transform: rotateY(180deg);
-  background: linear-gradient(160deg, var(--panel-open-top), var(--panel-open-bottom));
-}
-
-.panel-card--open .panel-card__face--front {
-  transform: rotateY(180deg);
-}
-
-.panel-card--open .panel-card__face--back {
-  transform: rotateY(360deg);
 }
 
 .guess-form {

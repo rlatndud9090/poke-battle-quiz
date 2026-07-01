@@ -25,6 +25,11 @@ describe("패널 메타데이터", () => {
     expect(getPanelMetadata("charmeleon").hasGigantamax).toBe(true);
   });
 
+  it("지역폼/분기폼은 다른 라인의 메가·거다이맥스를 끌어오지 않는다", () => {
+    expect(getPanelMetadata("slowbro-galar").hasMegaEvolution).toBe(false);
+    expect(getPanelMetadata("perrserker").hasGigantamax).toBe(false);
+  });
+
   it("대표 excluded 이유를 기록한다", () => {
     expect(getPanelMetadata("charizard-mega-x").eligibilityReason).toBe("excluded:mega");
     expect(getPanelMetadata("greninja-battle-bond").eligibilityReason).toBe("excluded:special-form");

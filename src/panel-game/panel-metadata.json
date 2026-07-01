@@ -1127,7 +1127,7 @@
     "beastBoost": "S",
     "evioliteEligible": true,
     "hasMegaEvolution": false,
-    "hasGigantamax": true,
+    "hasGigantamax": false,
     "titleAvailability": {
       "swsh": true,
       "la": false,
@@ -1143,7 +1143,7 @@
     "beastBoost": "A",
     "evioliteEligible": true,
     "hasMegaEvolution": false,
-    "hasGigantamax": true,
+    "hasGigantamax": false,
     "titleAvailability": {
       "swsh": true,
       "la": false,
@@ -1175,7 +1175,7 @@
     "beastBoost": "S",
     "evioliteEligible": false,
     "hasMegaEvolution": false,
-    "hasGigantamax": true,
+    "hasGigantamax": false,
     "titleAvailability": {
       "swsh": true,
       "la": false,
@@ -1750,7 +1750,7 @@
     "lowKickPower": 60,
     "beastBoost": "H",
     "evioliteEligible": true,
-    "hasMegaEvolution": true,
+    "hasMegaEvolution": false,
     "hasGigantamax": false,
     "titleAvailability": {
       "swsh": true,
@@ -1782,7 +1782,7 @@
     "lowKickPower": 80,
     "beastBoost": "A/C",
     "evioliteEligible": false,
-    "hasMegaEvolution": true,
+    "hasMegaEvolution": false,
     "hasGigantamax": false,
     "titleAvailability": {
       "swsh": true,
@@ -4182,7 +4182,7 @@
     "lowKickPower": 80,
     "beastBoost": "C/D",
     "evioliteEligible": false,
-    "hasMegaEvolution": true,
+    "hasMegaEvolution": false,
     "hasGigantamax": false,
     "titleAvailability": {
       "swsh": true,
@@ -16439,7 +16439,7 @@
     "beastBoost": "A",
     "evioliteEligible": false,
     "hasMegaEvolution": false,
-    "hasGigantamax": true,
+    "hasGigantamax": false,
     "titleAvailability": {
       "swsh": true,
       "la": false,

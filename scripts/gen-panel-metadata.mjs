@@ -137,10 +137,17 @@ function beastBoostLabel(baseStats) {
     .join("/");
 }
 
-function getEvolutionFamilyNums(entry) {
-  const queue = [toDexKey(entry.baseSpecies ?? entry.name)];
+function getFamilySeedKey(entry) {
+  if (entry.forme === "Galar" || entry.forme === "Alola" || entry.forme === "Hisui" || entry.forme === "Paldea") {
+    return toDexKey(entry.name);
+  }
+  return toDexKey(entry.baseSpecies ?? entry.name);
+}
+
+function getEvolutionFamilyKeys(entry) {
+  const queue = [getFamilySeedKey(entry)];
   const visited = new Set();
-  const familyNums = new Set();
+  const familyKeys = new Set();
 
   while (queue.length > 0) {
     const key = queue.shift();
@@ -150,7 +157,7 @@ function getEvolutionFamilyNums(entry) {
     const current = pokedex[key];
     if (!current) continue;
 
-    familyNums.add(current.num);
+    familyKeys.add(key);
 
     if (current.prevo) queue.push(toDexKey(current.prevo));
     for (const next of current.evos ?? []) {
@@ -158,23 +165,35 @@ function getEvolutionFamilyNums(entry) {
     }
   }
 
-  return familyNums;
+  return familyKeys;
+}
+
+function belongsToFamily(candidateEntry, familyKeys) {
+  const relationKeys = [
+    candidateEntry.baseSpecies,
+    candidateEntry.changesFrom,
+    candidateEntry.name,
+  ]
+    .filter(Boolean)
+    .map((value) => toDexKey(value));
+
+  return relationKeys.some((key) => familyKeys.has(key));
 }
 
 function hasMegaEvolution(entry) {
-  const familyNums = getEvolutionFamilyNums(entry);
+  const familyKeys = getEvolutionFamilyKeys(entry);
   return Object.values(pokedex).some(
     (candidateEntry) =>
-      familyNums.has(candidateEntry.num) &&
+      belongsToFamily(candidateEntry, familyKeys) &&
       (String(candidateEntry.name).includes("-Mega") || String(candidateEntry.forme ?? "").includes("Mega")),
   );
 }
 
 function hasGigantamax(entry) {
-  const familyNums = getEvolutionFamilyNums(entry);
+  const familyKeys = getEvolutionFamilyKeys(entry);
   return Object.values(pokedex).some(
     (candidateEntry) =>
-      familyNums.has(candidateEntry.num) &&
+      belongsToFamily(candidateEntry, familyKeys) &&
       (candidateEntry.canGigantamax ||
         candidateEntry.forme === "Gmax" ||
         String(candidateEntry.name).endsWith("-Gmax")),

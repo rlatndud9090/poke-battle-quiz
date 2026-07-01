@@ -51,6 +51,7 @@
 
 - **포켓몬 데이터 폼 누수·이름 충돌·캐시 키 수정(PR #1 리뷰 반영)** — [Bugfix](../raw/bugfix/pokemon-data-form-fixes/bugfix.md)
 - **하네스 최신화 및 wiki taxonomy 개정** — [Notes](../raw/chore/harness-wiki-taxonomy-update/notes.md)
+- **하네스 서브모듈 최신화** — [Notes](../raw/chore/harness-submodule-update/notes.md)
 
 ## Maintenance
 

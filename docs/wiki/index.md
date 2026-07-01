@@ -46,6 +46,7 @@
 ### 데일리 게임 루프
 
 - **추측/피드백 계약 및 정답 은닉 아키텍처** — [PRD](../raw/feature/guess-feedback-contract/prd.md) · [ADR](../raw/feature/guess-feedback-contract/adr.md) · [Notes](../raw/feature/guess-feedback-contract/notes.md)
+- **패널 플립 데일리 퀴즈 코어** — [PRD](../raw/feature/panel-flip-daily-quiz/prd.md) · [ADR](../raw/feature/panel-flip-daily-quiz/adr.md) · [Notes](../raw/feature/panel-flip-daily-quiz/notes.md)
 
 ### 프로젝트 운영
 

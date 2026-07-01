@@ -137,35 +137,33 @@ function beastBoostLabel(baseStats) {
     .join("/");
 }
 
-function getFamilySeedKey(entry) {
-  if (entry.forme === "Galar" || entry.forme === "Alola" || entry.forme === "Hisui" || entry.forme === "Paldea") {
-    return toDexKey(entry.name);
+function getLineageKeys(entry) {
+  const lineageKeys = new Set();
+  const seedKey = toDexKey(entry.name);
+
+  let currentKey = seedKey;
+  while (currentKey) {
+    const current = pokedex[currentKey];
+    if (!current || lineageKeys.has(currentKey)) break;
+    lineageKeys.add(currentKey);
+    currentKey = current.prevo ? toDexKey(current.prevo) : "";
   }
-  return toDexKey(entry.baseSpecies ?? entry.name);
-}
 
-function getEvolutionFamilyKeys(entry) {
-  const queue = [getFamilySeedKey(entry)];
-  const visited = new Set();
-  const familyKeys = new Set();
-
+  const queue = [seedKey];
   while (queue.length > 0) {
     const key = queue.shift();
-    if (!key || visited.has(key)) continue;
-    visited.add(key);
-
+    if (!key) continue;
     const current = pokedex[key];
     if (!current) continue;
-
-    familyKeys.add(key);
-
-    if (current.prevo) queue.push(toDexKey(current.prevo));
+    lineageKeys.add(key);
     for (const next of current.evos ?? []) {
-      queue.push(toDexKey(next));
+      const nextKey = toDexKey(next);
+      if (lineageKeys.has(nextKey)) continue;
+      queue.push(nextKey);
     }
   }
 
-  return familyKeys;
+  return lineageKeys;
 }
 
 function belongsToFamily(candidateEntry, familyKeys) {
@@ -181,7 +179,7 @@ function belongsToFamily(candidateEntry, familyKeys) {
 }
 
 function hasMegaEvolution(entry) {
-  const familyKeys = getEvolutionFamilyKeys(entry);
+  const familyKeys = getLineageKeys(entry);
   return Object.values(pokedex).some(
     (candidateEntry) =>
       belongsToFamily(candidateEntry, familyKeys) &&
@@ -190,7 +188,7 @@ function hasMegaEvolution(entry) {
 }
 
 function hasGigantamax(entry) {
-  const familyKeys = getEvolutionFamilyKeys(entry);
+  const familyKeys = getLineageKeys(entry);
   return Object.values(pokedex).some(
     (candidateEntry) =>
       belongsToFamily(candidateEntry, familyKeys) &&

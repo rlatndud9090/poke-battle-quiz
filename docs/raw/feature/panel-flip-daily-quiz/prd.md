@@ -1,8 +1,8 @@
 ---
 title: "패널 플립 데일리 퀴즈 코어"
 date: "2026-06-30"
-status: review # draft | review | approved | rejected
-approval:
+status: approved # draft | review | approved | rejected
+approval: "user:2026-07-01:패널 플립 데일리 퀴즈 코어 PRD 승인"
 unit_type: feature
 branch: "feature/panel-flip-daily-quiz"
 raw_path: "docs/raw/feature/panel-flip-daily-quiz"

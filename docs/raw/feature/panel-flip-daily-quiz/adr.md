@@ -1,8 +1,8 @@
 ---
 title: "패널 플립 데일리 퀴즈 코어"
 date: "2026-06-30"
-status: proposed # proposed | accepted | deprecated | superseded
-approval:
+status: accepted # proposed | accepted | deprecated | superseded
+approval: "user:2026-07-01:eligible 후보군, 12회 예산, 실패 공개 범위 포함 ADR 승인"
 related_prd: "./prd.md"
 unit_type: feature
 branch: "feature/panel-flip-daily-quiz"

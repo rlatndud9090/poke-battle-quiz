@@ -18,6 +18,13 @@ describe("패널 메타데이터", () => {
     expect(getPanelMetadata("meowstic-female").eligible).toBe(false);
   });
 
+  it("같은 진화 라인의 메가/거다이맥스 존재를 pre-evolution에도 반영한다", () => {
+    expect(getPanelMetadata("bulbasaur").hasMegaEvolution).toBe(true);
+    expect(getPanelMetadata("ivysaur").hasMegaEvolution).toBe(true);
+    expect(getPanelMetadata("charmander").hasGigantamax).toBe(true);
+    expect(getPanelMetadata("charmeleon").hasGigantamax).toBe(true);
+  });
+
   it("대표 excluded 이유를 기록한다", () => {
     expect(getPanelMetadata("charizard-mega-x").eligibilityReason).toBe("excluded:mega");
     expect(getPanelMetadata("greninja-battle-bond").eligibilityReason).toBe("excluded:special-form");

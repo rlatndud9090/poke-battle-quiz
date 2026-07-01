@@ -102,6 +102,10 @@ function toShowdownId(candidateId) {
   return SHOWDOWN_ID_ALIASES[candidateId] ?? candidateId.toLowerCase().replace(/[^a-z0-9]+/g, "");
 }
 
+function toDexKey(value) {
+  return String(value).toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
+
 function getDexEntry(candidate) {
   const entry = pokedex[toShowdownId(candidate.id)];
   if (!entry) throw new Error(`Missing Showdown entry for ${candidate.id}`);
@@ -133,15 +137,47 @@ function beastBoostLabel(baseStats) {
     .join("/");
 }
 
-function hasMegaEvolution(speciesId) {
-  return (bySpecies.get(speciesId) ?? []).some((candidate) => candidate.formCategory === "mega");
+function getEvolutionFamilyNums(entry) {
+  const queue = [toDexKey(entry.baseSpecies ?? entry.name)];
+  const visited = new Set();
+  const familyNums = new Set();
+
+  while (queue.length > 0) {
+    const key = queue.shift();
+    if (!key || visited.has(key)) continue;
+    visited.add(key);
+
+    const current = pokedex[key];
+    if (!current) continue;
+
+    familyNums.add(current.num);
+
+    if (current.prevo) queue.push(toDexKey(current.prevo));
+    for (const next of current.evos ?? []) {
+      queue.push(toDexKey(next));
+    }
+  }
+
+  return familyNums;
 }
 
-function hasGigantamax(speciesId) {
+function hasMegaEvolution(entry) {
+  const familyNums = getEvolutionFamilyNums(entry);
   return Object.values(pokedex).some(
-    (entry) =>
-      entry.num === speciesId &&
-      (entry.canGigantamax || entry.forme === "Gmax" || String(entry.name).endsWith("-Gmax")),
+    (candidateEntry) =>
+      familyNums.has(candidateEntry.num) &&
+      (String(candidateEntry.name).includes("-Mega") || String(candidateEntry.forme ?? "").includes("Mega")),
+  );
+}
+
+function hasGigantamax(entry) {
+  const familyNums = getEvolutionFamilyNums(entry);
+  return Object.values(pokedex).some(
+    (candidateEntry) =>
+      familyNums.has(candidateEntry.num) &&
+      (candidateEntry.canGigantamax ||
+        candidateEntry.forme === "Gmax" ||
+        String(candidateEntry.name).endsWith("-Gmax")),
   );
 }
 
@@ -161,8 +197,8 @@ const metadata = candidates.map((candidate) => {
     lowKickPower: lowKickPower(dexEntry.weightkg),
     beastBoost: beastBoostLabel(dexEntry.baseStats),
     evioliteEligible: Boolean(dexEntry.evos?.length),
-    hasMegaEvolution: hasMegaEvolution(candidate.speciesId),
-    hasGigantamax: hasGigantamax(candidate.speciesId),
+    hasMegaEvolution: hasMegaEvolution(dexEntry),
+    hasGigantamax: hasGigantamax(dexEntry),
     titleAvailability: {
       swsh: titleAvailability(swshFormats, candidate.id),
       la: titleAvailability(laFormats, candidate.id),
